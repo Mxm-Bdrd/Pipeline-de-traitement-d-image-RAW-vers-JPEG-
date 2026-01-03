@@ -7,17 +7,9 @@ Shared utilities for loading/saving images, metadata, and color conversions.
 """
 
 import numpy as np
-import os
 import json
 from PIL import Image
-
-# Try to use tifffile for better 16-bit support
-try:
-    import tifffile
-    HAS_TIFFFILE = True
-except ImportError:
-    HAS_TIFFFILE = False
-    print("Warning: tifffile not installed. Using PIL for TIFF (may have precision issues).")
+import tifffile
 
 
 # =============================================================================
@@ -30,10 +22,7 @@ def load_tiff(filepath):
     
     Works for both grayscale (mosaic) and RGB images.
     """
-    if HAS_TIFFFILE:
-        image = tifffile.imread(filepath)
-    else:
-        image = np.array(Image.open(filepath))
+    image = tifffile.imread(filepath)
     
     if image.dtype == np.uint16:
         return image.astype(np.float32) / 65535.0
@@ -53,16 +42,10 @@ def save_tiff16(image, filepath):
     img_clipped = np.clip(image, 0, 1)
     img_16bit = (img_clipped * 65535).astype(np.uint16)
     
-    if HAS_TIFFFILE:
-        if img_16bit.ndim == 3:
-            tifffile.imwrite(filepath, img_16bit, photometric='rgb')
-        else:
-            tifffile.imwrite(filepath, img_16bit)
+    if img_16bit.ndim == 3:
+        tifffile.imwrite(filepath, img_16bit, photometric='rgb')
     else:
-        if img_16bit.ndim == 3:
-            Image.fromarray(img_16bit, mode='RGB').save(filepath)
-        else:
-            Image.fromarray(img_16bit, mode='I;16').save(filepath)
+        tifffile.imwrite(filepath, img_16bit)
     
     print(f"  Saved TIFF: {filepath}")
 
