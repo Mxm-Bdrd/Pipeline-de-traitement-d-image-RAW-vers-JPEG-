@@ -1,0 +1,81 @@
+{
+  "bayer_pattern": "RGGB",
+  "bayer_pattern_2x2": [
+    [
+      "R",
+      "G"
+    ],
+    [
+      "G",
+      "B"
+    ]
+  ],
+  "black_level_per_channel": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "white_level_per_channel": [
+    65535,
+    65535,
+    65535,
+    65535
+  ],
+  "inferred_bit_depth": 16,
+  "camera_whitebalance": [
+    1.0,
+    1.0,
+    1.0,
+    0.0
+  ],
+  "rgb_xyz_matrix": [
+    [
+      3.2404542,
+      -1.5371385,
+      -0.4985314
+    ],
+    [
+      -0.969266,
+      1.8760108,
+      0.041556
+    ],
+    [
+      0.0556434,
+      -0.2040259,
+      1.0572252
+    ]
+  ],
+  "color_matrix": [
+    [
+      1.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "daylight_whitebalance": [
+    1.0,
+    1.0,
+    1.0,
+    0.0
+  ],
+  "color_desc": "RGBG",
+  "orientation_flip": 0,
+  "orientation_description": "Pas de rotation",
+  "image_height": 1920,
+  "image_width": 1080,
+  "normalization": {
+    "black_level_used": 0.0,
+    "white_level_used": 65535.0
+  }
+}

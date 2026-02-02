@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TP1 - Section 1</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap');
+        
+        * { box-sizing: border-box; }
+        
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e8e8e8;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            margin-bottom: 40px;
+        }
+        
+        .student-name-field {
+            background: rgba(255,255,255,0.05);
+            border: 2px dashed rgba(255,255,255,0.3);
+            border-radius: 8px;
+            padding: 15px 25px;
+            margin: 20px auto;
+            max-width: 500px;
+            text-align: left;
+        }
+        
+        .student-name-field label {
+            display: block;
+            color: #a0a0a0;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+        
+        .student-name-field input {
+            width: 100%;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 4px;
+            padding: 10px 15px;
+            color: #fff;
+            font-size: 1em;
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+        
+        .student-name-field input:focus {
+            outline: none;
+            border-color: #4fc3f7;
+            box-shadow: 0 0 0 2px #4fc3f740;
+        }
+        
+        .student-name-field input::placeholder {
+            color: #666;
+            font-style: italic;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #fff;
+            margin: 0 0 15px 0;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: #a0a0a0;
+            margin: 0;
+        }
+        
+        .date-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 20px;
+            border-radius: 20px;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #b0b0b0;
+        }
+        
+        .image-section {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        
+        .image-section h2 {
+            color: #4fc3f7;
+            font-size: 1.6em;
+            margin: 0 0 25px 0;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #4fc3f740;
+        }
+        
+        h3 {
+            color: #e0e1dd;
+            font-size: 1.3em;
+            margin: 30px 0 20px 0;
+        }
+        
+        h3::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 24px;
+            background: #4fc3f7;
+            margin-right: 12px;
+            border-radius: 2px;
+            vertical-align: middle;
+        }
+        
+        .algorithm-box {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #4fc3f7;
+        }
+        
+        .algorithm-box h4 {
+            color: #4fc3f7;
+            margin: 0 0 10px 0;
+        }
+        
+        .algorithm-box p {
+            margin: 5px 0;
+            line-height: 1.6;
+        }
+        
+        .metrics-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .metrics-table th {
+            background: #4fc3f730;
+            color: #4fc3f7;
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+        }
+        
+        .metrics-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95em;
+        }
+        
+        .metrics-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .metrics-table tr:hover {
+            background: rgba(255,255,255,0.03);
+        }
+        
+        .figure-container {
+            text-align: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+        }
+        
+        .figure-container img {
+            max-width: 60%;
+            max-height: 400px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .figure-container img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 30px rgba(0,0,0,0.5);
+        }
+        
+        .figure-caption {
+            margin-top: 10px;
+            font-style: italic;
+            color: #a0a0a0;
+            font-size: 0.9em;
+        }
+        
+        /* Lightbox/Modal styles */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            animation: fadeIn 0.3s;
+        }
+        
+        .lightbox.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .lightbox-content {
+            max-width: 95vw;
+            max-height: 95vh;
+            margin: auto;
+            animation: zoomIn 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 95vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.8);
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .lightbox-close:hover {
+            color: #ffc107;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        /* Image grid styles */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .image-grid-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .image-grid-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+        }
+        
+        .image-grid-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .image-grid-item .image-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: #fff;
+            padding: 15px 10px 10px;
+            font-size: 0.9em;
+            text-align: center;
+        }
+        
+        /* Comparison grid styles */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .comparison-pair {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .comparison-pair-title {
+            text-align: center;
+            color: #fff;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+        }
+        
+        .comparison-images {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .comparison-image-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .comparison-image-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+        }
+        
+        .comparison-image-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .comparison-image-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            color: #fff;
+            padding: 12px 8px 8px;
+            font-size: 0.85em;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .metadata-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .metadata-card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #4fc3f7;
+        }
+        
+        .metadata-card h4 {
+            color: #4fc3f7;
+            margin: 0 0 12px 0;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .metadata-card .value {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1em;
+            color: #fff;
+            word-break: break-all;
+        }
+        
+        .formula-box {
+            background: rgba(0,0,0,0.4);
+            padding: 20px 25px;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1em;
+            text-align: center;
+            margin: 20px 0;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #ffd54f;
+        }
+        
+        .matrix-display {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85em;
+            overflow-x: auto;
+            white-space: pre;
+            color: #b0bec5;
+        }
+        
+        .bayer-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 40px);
+            gap: 4px;
+            margin-top: 10px;
+        }
+        
+        .bayer-cell {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .bayer-cell.R { background: linear-gradient(135deg, #f44336, #c62828); }
+        .bayer-cell.G { background: linear-gradient(135deg, #4caf50, #2e7d32); }
+        .bayer-cell.B { background: linear-gradient(135deg, #2196f3, #1565c0); }
+        
+        .wb-values {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        
+        .wb-chip {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-family: 'Fira Code', monospace;
+            font-weight: 500;
+        }
+        
+        .wb-chip.r { background: rgba(244, 67, 54, 0.3); color: #ef9a9a; }
+        .wb-chip.g { background: rgba(76, 175, 80, 0.3); color: #a5d6a7; }
+        .wb-chip.b { background: rgba(33, 150, 243, 0.3); color: #90caf9; }
+        
+        code {
+            background: #4fc3f720;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9em;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+        <span class="lightbox-close">&times;</span>
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="">
+        </div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1>📷 TP1 - Section 1</h1>
+            <p class="subtitle">Chargement et Compréhension des Données RAW</p>
+            <div class="date-badge">Généré le 01 February 2026 à 23:00</div>
+        </header>
+        
+        
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Ahsoka</h2>
+            <h3>Métadonnées extraites</h3>
+<div class="metadata-grid">
+        <div class="metadata-card">
+            <h4>Motif de Bayer</h4>
+            <div class="value">GBRG</div>
+            <div class="bayer-grid"><div class="bayer-cell G">G</div><div class="bayer-cell B">B</div><div class="bayer-cell R">R</div><div class="bayer-cell G">G</div></div>
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Profondeur de bits</h4>
+            <div class="value">14 bits</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Dimensions</h4>
+            <div class="value">5202 × 3464 px</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Orientation (EXIF)</h4>
+            <div class="value">90° anti-horaire</div>
+            
+        </div>
+    </div><h3>Niveaux de noir et de blanc</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Paramètre</th><th>Canal 0</th><th>Canal 1</th><th>Canal 2</th><th>Canal 3</th></tr></thead>
+            <tbody><tr><td>Niveau de noir</td><td>2047</td><td>2047</td><td>2047</td><td>2047</td></tr>
+<tr><td>Niveau de blanc</td><td>12507</td><td>12507</td><td>12507</td><td>12507</td></tr>
+</tbody>
+        </table>
+    <h3>Formule de normalisation</h3>
+<div class="formula-box">normalized = (raw_value - black_level) / (white_level - black_level)</div><h3>Balance des blancs (caméra)</h3>
+
+        <div class="wb-values">
+            <span class="wb-chip r">R: 1.8281</span>
+            <span class="wb-chip g">G: 1.0000</span>
+            <span class="wb-chip b">B: 1.7930</span>
+        </div>
+    <h3>Matrice RGB-XYZ</h3>
+<div class="matrix-display">  [ 0.64610, -0.09070, -0.08820]
+  [-0.43000,  1.21840,  0.23780]
+  [-0.08190,  0.19440,  0.59310]
+  [ 0.00000,  0.00000,  0.00000]</div><h3>Matrice de couleur</h3>
+<div class="matrix-display">  [ 1.87945, -1.03258,  0.15313,  0.00000]
+  [-0.21979,  1.71531, -0.49552,  0.00000]
+  [ 0.00691, -0.51494,  1.50803,  0.00000]</div><h3>Région 16×16 de la mosaïque</h3>
+
+        <div class="figure-container">
+            <img src="Ahsoka_zoom16x16.png" alt="Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré." class="clickable-image" data-fullsize="Ahsoka_zoom16x16.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré.</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Discussion</h2>
+            
+        <h3>Analyse des résultats</h3>
+        <p>
+            J'ai remarqué que mes images personnelles ont 14 bits de profondeur.
+            Celles fourni varie entre 12, 14 et même 16 bits pour le pelican. 
+            On comprend vite l'importance de la normalisation pour ramener
+            toutes ces valeurs dans un seul intervalle pour le traitement (float dans [0, 1]).
+        </p>
+        <p>
+            Aussi, en zoomant sur le 16x16, on peut voir le filtre de Bayer de l'image.
+            Chaque pixel ne contient l'information que d'une couleur (RGB). Les filtre change d'image en image.
+            L'image n'est pas encore dématricée donc le filtre est très apparent quand on zoom.
+        </p>
+        <p>
+            Finalement, le niveau de noir n'est jamais à 0 (le true black) dans les métadonnées.
+            J'assume que c'est le capteur qui capture de la lumière parasite.
+            Le code soustrait on offset avant la normalisation pour ça.
+        </p>
+        
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Antoine</h2>
+            <h3>Métadonnées extraites</h3>
+<div class="metadata-grid">
+        <div class="metadata-card">
+            <h4>Motif de Bayer</h4>
+            <div class="value">GBRG</div>
+            <div class="bayer-grid"><div class="bayer-cell G">G</div><div class="bayer-cell B">B</div><div class="bayer-cell R">R</div><div class="bayer-cell G">G</div></div>
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Profondeur de bits</h4>
+            <div class="value">14 bits</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Dimensions</h4>
+            <div class="value">5202 × 3464 px</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Orientation (EXIF)</h4>
+            <div class="value">90° horaire</div>
+            
+        </div>
+    </div><h3>Niveaux de noir et de blanc</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Paramètre</th><th>Canal 0</th><th>Canal 1</th><th>Canal 2</th><th>Canal 3</th></tr></thead>
+            <tbody><tr><td>Niveau de noir</td><td>2047</td><td>2047</td><td>2047</td><td>2047</td></tr>
+<tr><td>Niveau de blanc</td><td>15000</td><td>15000</td><td>15000</td><td>16383</td></tr>
+</tbody>
+        </table>
+    <h3>Formule de normalisation</h3>
+<div class="formula-box">normalized = (raw_value - black_level) / (white_level - black_level)</div><h3>Balance des blancs (caméra)</h3>
+
+        <div class="wb-values">
+            <span class="wb-chip r">R: 1.7266</span>
+            <span class="wb-chip g">G: 1.0000</span>
+            <span class="wb-chip b">B: 1.8682</span>
+        </div>
+    <h3>Matrice RGB-XYZ</h3>
+<div class="matrix-display">  [ 0.64610, -0.09070, -0.08820]
+  [-0.43000,  1.21840,  0.23780]
+  [-0.08190,  0.19440,  0.59310]
+  [ 0.00000,  0.00000,  0.00000]</div><h3>Matrice de couleur</h3>
+<div class="matrix-display">  [ 1.87945, -1.03258,  0.15313,  0.00000]
+  [-0.21979,  1.71531, -0.49552,  0.00000]
+  [ 0.00691, -0.51494,  1.50803,  0.00000]</div><h3>Région 16×16 de la mosaïque</h3>
+
+        <div class="figure-container">
+            <img src="Antoine_zoom16x16.png" alt="Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré." class="clickable-image" data-fullsize="Antoine_zoom16x16.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré.</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Discussion</h2>
+            
+        <h3>Analyse des résultats</h3>
+        <p>
+            J'ai remarqué que mes images personnelles ont 14 bits de profondeur.
+            Celles fourni varie entre 12, 14 et même 16 bits pour le pelican. 
+            On comprend vite l'importance de la normalisation pour ramener
+            toutes ces valeurs dans un seul intervalle pour le traitement (float dans [0, 1]).
+        </p>
+        <p>
+            Aussi, en zoomant sur le 16x16, on peut voir le filtre de Bayer de l'image.
+            Chaque pixel ne contient l'information que d'une couleur (RGB). Les filtre change d'image en image.
+            L'image n'est pas encore dématricée donc le filtre est très apparent quand on zoom.
+        </p>
+        <p>
+            Finalement, le niveau de noir n'est jamais à 0 (le true black) dans les métadonnées.
+            J'assume que c'est le capteur qui capture de la lumière parasite.
+            Le code soustrait on offset avant la normalisation pour ça.
+        </p>
+        
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> BoisDeCoulonge</h2>
+            <h3>Métadonnées extraites</h3>
+<div class="metadata-grid">
+        <div class="metadata-card">
+            <h4>Motif de Bayer</h4>
+            <div class="value">GBRG</div>
+            <div class="bayer-grid"><div class="bayer-cell G">G</div><div class="bayer-cell B">B</div><div class="bayer-cell R">R</div><div class="bayer-cell G">G</div></div>
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Profondeur de bits</h4>
+            <div class="value">14 bits</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Dimensions</h4>
+            <div class="value">5202 × 3464 px</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Orientation (EXIF)</h4>
+            <div class="value">90° anti-horaire</div>
+            
+        </div>
+    </div><h3>Niveaux de noir et de blanc</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Paramètre</th><th>Canal 0</th><th>Canal 1</th><th>Canal 2</th><th>Canal 3</th></tr></thead>
+            <tbody><tr><td>Niveau de noir</td><td>2048</td><td>2048</td><td>2048</td><td>2048</td></tr>
+<tr><td>Niveau de blanc</td><td>15000</td><td>15000</td><td>15000</td><td>16383</td></tr>
+</tbody>
+        </table>
+    <h3>Formule de normalisation</h3>
+<div class="formula-box">normalized = (raw_value - black_level) / (white_level - black_level)</div><h3>Balance des blancs (caméra)</h3>
+
+        <div class="wb-values">
+            <span class="wb-chip r">R: 1.9502</span>
+            <span class="wb-chip g">G: 1.0000</span>
+            <span class="wb-chip b">B: 1.9502</span>
+        </div>
+    <h3>Matrice RGB-XYZ</h3>
+<div class="matrix-display">  [ 0.64610, -0.09070, -0.08820]
+  [-0.43000,  1.21840,  0.23780]
+  [-0.08190,  0.19440,  0.59310]
+  [ 0.00000,  0.00000,  0.00000]</div><h3>Matrice de couleur</h3>
+<div class="matrix-display">  [ 1.87945, -1.03258,  0.15313,  0.00000]
+  [-0.21979,  1.71531, -0.49552,  0.00000]
+  [ 0.00691, -0.51494,  1.50803,  0.00000]</div><h3>Région 16×16 de la mosaïque</h3>
+
+        <div class="figure-container">
+            <img src="BoisDeCoulonge_zoom16x16.png" alt="Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré." class="clickable-image" data-fullsize="BoisDeCoulonge_zoom16x16.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré.</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Discussion</h2>
+            
+        <h3>Analyse des résultats</h3>
+        <p>
+            J'ai remarqué que mes images personnelles ont 14 bits de profondeur.
+            Celles fourni varie entre 12, 14 et même 16 bits pour le pelican. 
+            On comprend vite l'importance de la normalisation pour ramener
+            toutes ces valeurs dans un seul intervalle pour le traitement (float dans [0, 1]).
+        </p>
+        <p>
+            Aussi, en zoomant sur le 16x16, on peut voir le filtre de Bayer de l'image.
+            Chaque pixel ne contient l'information que d'une couleur (RGB). Les filtre change d'image en image.
+            L'image n'est pas encore dématricée donc le filtre est très apparent quand on zoom.
+        </p>
+        <p>
+            Finalement, le niveau de noir n'est jamais à 0 (le true black) dans les métadonnées.
+            J'assume que c'est le capteur qui capture de la lumière parasite.
+            Le code soustrait on offset avant la normalisation pour ça.
+        </p>
+        
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> a0011-DSC_0082</h2>
+            <h3>Métadonnées extraites</h3>
+<div class="metadata-grid">
+        <div class="metadata-card">
+            <h4>Motif de Bayer</h4>
+            <div class="value">BGGR</div>
+            <div class="bayer-grid"><div class="bayer-cell B">B</div><div class="bayer-cell G">G</div><div class="bayer-cell G">G</div><div class="bayer-cell R">R</div></div>
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Profondeur de bits</h4>
+            <div class="value">12 bits</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Dimensions</h4>
+            <div class="value">3040 × 2014 px</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Orientation (EXIF)</h4>
+            <div class="value">90° horaire</div>
+            
+        </div>
+    </div><h3>Niveaux de noir et de blanc</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Paramètre</th><th>Canal 0</th><th>Canal 1</th><th>Canal 2</th><th>Canal 3</th></tr></thead>
+            <tbody><tr><td>Niveau de noir</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>Niveau de blanc</td><td>4095</td><td>4095</td><td>4095</td><td>4095</td></tr>
+</tbody>
+        </table>
+    <h3>Formule de normalisation</h3>
+<div class="formula-box">normalized = (raw_value - black_level) / (white_level - black_level)</div><h3>Balance des blancs (caméra)</h3>
+
+        <div class="wb-values">
+            <span class="wb-chip r">R: 1.8649</span>
+            <span class="wb-chip g">G: 1.0000</span>
+            <span class="wb-chip b">B: 1.7939</span>
+        </div>
+    <h3>Matrice RGB-XYZ</h3>
+<div class="matrix-display">  [ 0.77320, -0.24220, -0.07890]
+  [-0.82380,  1.58840,  0.24980]
+  [-0.08590,  0.07830,  0.73300]
+  [ 0.00000,  0.00000,  0.00000]</div><h3>Matrice de couleur</h3>
+<div class="matrix-display">  [ 1.53094, -0.41715, -0.11379,  0.00000]
+  [-0.00768,  1.28808, -0.28040,  0.00000]
+  [ 0.01153, -0.21409,  1.20256,  0.00000]</div><h3>Région 16×16 de la mosaïque</h3>
+
+        <div class="figure-container">
+            <img src="a0011-DSC_0082_zoom16x16.png" alt="Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré." class="clickable-image" data-fullsize="a0011-DSC_0082_zoom16x16.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré.</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Discussion</h2>
+            
+        <h3>Analyse des résultats</h3>
+        <p>
+            J'ai remarqué que mes images personnelles ont 14 bits de profondeur.
+            Celles fourni varie entre 12, 14 et même 16 bits pour le pelican. 
+            On comprend vite l'importance de la normalisation pour ramener
+            toutes ces valeurs dans un seul intervalle pour le traitement (float dans [0, 1]).
+        </p>
+        <p>
+            Aussi, en zoomant sur le 16x16, on peut voir le filtre de Bayer de l'image.
+            Chaque pixel ne contient l'information que d'une couleur (RGB). Les filtre change d'image en image.
+            L'image n'est pas encore dématricée donc le filtre est très apparent quand on zoom.
+        </p>
+        <p>
+            Finalement, le niveau de noir n'est jamais à 0 (le true black) dans les métadonnées.
+            J'assume que c'est le capteur qui capture de la lumière parasite.
+            Le code soustrait on offset avant la normalisation pour ça.
+        </p>
+        
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> a0018-kme_234</h2>
+            <h3>Métadonnées extraites</h3>
+<div class="metadata-grid">
+        <div class="metadata-card">
+            <h4>Motif de Bayer</h4>
+            <div class="value">RGGB</div>
+            <div class="bayer-grid"><div class="bayer-cell R">R</div><div class="bayer-cell G">G</div><div class="bayer-cell G">G</div><div class="bayer-cell B">B</div></div>
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Profondeur de bits</h4>
+            <div class="value">12 bits</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Dimensions</h4>
+            <div class="value">3522 × 2348 px</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Orientation (EXIF)</h4>
+            <div class="value">Pas de rotation</div>
+            
+        </div>
+    </div><h3>Niveaux de noir et de blanc</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Paramètre</th><th>Canal 0</th><th>Canal 1</th><th>Canal 2</th><th>Canal 3</th></tr></thead>
+            <tbody><tr><td>Niveau de noir</td><td>128</td><td>128</td><td>127</td><td>127</td></tr>
+<tr><td>Niveau de blanc</td><td>4095</td><td>4095</td><td>4095</td><td>4095</td></tr>
+</tbody>
+        </table>
+    <h3>Formule de normalisation</h3>
+<div class="formula-box">normalized = (raw_value - black_level) / (white_level - black_level)</div><h3>Balance des blancs (caméra)</h3>
+
+        <div class="wb-values">
+            <span class="wb-chip r">R: 1.9360</span>
+            <span class="wb-chip g">G: 1.0000</span>
+            <span class="wb-chip b">B: 1.4493</span>
+        </div>
+    <h3>Matrice RGB-XYZ</h3>
+<div class="matrix-display">  [ 0.65990, -0.05370, -0.08910]
+  [-0.80710,  1.57830,  0.24240]
+  [-0.19830,  0.22340,  0.74620]
+  [ 0.00000,  0.00000,  0.00000]</div><h3>Matrice de couleur</h3>
+<div class="matrix-display">  [ 1.85386, -0.91589,  0.06203,  0.00000]
+  [-0.02986,  1.32940, -0.29954,  0.00000]
+  [ 0.06108, -0.36920,  1.30812,  0.00000]</div><h3>Région 16×16 de la mosaïque</h3>
+
+        <div class="figure-container">
+            <img src="a0018-kme_234_zoom16x16.png" alt="Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré." class="clickable-image" data-fullsize="a0018-kme_234_zoom16x16.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré.</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Discussion</h2>
+            
+        <h3>Analyse des résultats</h3>
+        <p>
+            J'ai remarqué que mes images personnelles ont 14 bits de profondeur.
+            Celles fourni varie entre 12, 14 et même 16 bits pour le pelican. 
+            On comprend vite l'importance de la normalisation pour ramener
+            toutes ces valeurs dans un seul intervalle pour le traitement (float dans [0, 1]).
+        </p>
+        <p>
+            Aussi, en zoomant sur le 16x16, on peut voir le filtre de Bayer de l'image.
+            Chaque pixel ne contient l'information que d'une couleur (RGB). Les filtre change d'image en image.
+            L'image n'est pas encore dématricée donc le filtre est très apparent quand on zoom.
+        </p>
+        <p>
+            Finalement, le niveau de noir n'est jamais à 0 (le true black) dans les métadonnées.
+            J'assume que c'est le capteur qui capture de la lumière parasite.
+            Le code soustrait on offset avant la normalisation pour ça.
+        </p>
+        
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> a0026-kme_391</h2>
+            <h3>Métadonnées extraites</h3>
+<div class="metadata-grid">
+        <div class="metadata-card">
+            <h4>Motif de Bayer</h4>
+            <div class="value">RGGB</div>
+            <div class="bayer-grid"><div class="bayer-cell R">R</div><div class="bayer-cell G">G</div><div class="bayer-cell G">G</div><div class="bayer-cell B">B</div></div>
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Profondeur de bits</h4>
+            <div class="value">12 bits</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Dimensions</h4>
+            <div class="value">3522 × 2348 px</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Orientation (EXIF)</h4>
+            <div class="value">Pas de rotation</div>
+            
+        </div>
+    </div><h3>Niveaux de noir et de blanc</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Paramètre</th><th>Canal 0</th><th>Canal 1</th><th>Canal 2</th><th>Canal 3</th></tr></thead>
+            <tbody><tr><td>Niveau de noir</td><td>128</td><td>128</td><td>127</td><td>127</td></tr>
+<tr><td>Niveau de blanc</td><td>4095</td><td>4095</td><td>4095</td><td>4095</td></tr>
+</tbody>
+        </table>
+    <h3>Formule de normalisation</h3>
+<div class="formula-box">normalized = (raw_value - black_level) / (white_level - black_level)</div><h3>Balance des blancs (caméra)</h3>
+
+        <div class="wb-values">
+            <span class="wb-chip r">R: 1.4585</span>
+            <span class="wb-chip g">G: 1.0000</span>
+            <span class="wb-chip b">B: 2.1288</span>
+        </div>
+    <h3>Matrice RGB-XYZ</h3>
+<div class="matrix-display">  [ 0.65990, -0.05370, -0.08910]
+  [-0.80710,  1.57830,  0.24240]
+  [-0.19830,  0.22340,  0.74620]
+  [ 0.00000,  0.00000,  0.00000]</div><h3>Matrice de couleur</h3>
+<div class="matrix-display">  [ 1.85387, -0.91589,  0.06202,  0.00000]
+  [-0.02989,  1.32940, -0.29951,  0.00000]
+  [ 0.06120, -0.36919,  1.30800,  0.00000]</div><h3>Région 16×16 de la mosaïque</h3>
+
+        <div class="figure-container">
+            <img src="a0026-kme_391_zoom16x16.png" alt="Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré." class="clickable-image" data-fullsize="a0026-kme_391_zoom16x16.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré.</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Discussion</h2>
+            
+        <h3>Analyse des résultats</h3>
+        <p>
+            J'ai remarqué que mes images personnelles ont 14 bits de profondeur.
+            Celles fourni varie entre 12, 14 et même 16 bits pour le pelican. 
+            On comprend vite l'importance de la normalisation pour ramener
+            toutes ces valeurs dans un seul intervalle pour le traitement (float dans [0, 1]).
+        </p>
+        <p>
+            Aussi, en zoomant sur le 16x16, on peut voir le filtre de Bayer de l'image.
+            Chaque pixel ne contient l'information que d'une couleur (RGB). Les filtre change d'image en image.
+            L'image n'est pas encore dématricée donc le filtre est très apparent quand on zoom.
+        </p>
+        <p>
+            Finalement, le niveau de noir n'est jamais à 0 (le true black) dans les métadonnées.
+            J'assume que c'est le capteur qui capture de la lumière parasite.
+            Le code soustrait on offset avant la normalisation pour ça.
+        </p>
+        
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> a0387-IMG_3388</h2>
+            <h3>Métadonnées extraites</h3>
+<div class="metadata-grid">
+        <div class="metadata-card">
+            <h4>Motif de Bayer</h4>
+            <div class="value">RGGB</div>
+            <div class="bayer-grid"><div class="bayer-cell R">R</div><div class="bayer-cell G">G</div><div class="bayer-cell G">G</div><div class="bayer-cell B">B</div></div>
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Profondeur de bits</h4>
+            <div class="value">14 bits</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Dimensions</h4>
+            <div class="value">4290 × 2856 px</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Orientation (EXIF)</h4>
+            <div class="value">Pas de rotation</div>
+            
+        </div>
+    </div><h3>Niveaux de noir et de blanc</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Paramètre</th><th>Canal 0</th><th>Canal 1</th><th>Canal 2</th><th>Canal 3</th></tr></thead>
+            <tbody><tr><td>Niveau de noir</td><td>1024</td><td>1024</td><td>1024</td><td>1025</td></tr>
+<tr><td>Niveau de blanc</td><td>16000</td><td>16000</td><td>16000</td><td>15812</td></tr>
+</tbody>
+        </table>
+    <h3>Formule de normalisation</h3>
+<div class="formula-box">normalized = (raw_value - black_level) / (white_level - black_level)</div><h3>Balance des blancs (caméra)</h3>
+
+        <div class="wb-values">
+            <span class="wb-chip r">R: 1.9943</span>
+            <span class="wb-chip g">G: 1.0000</span>
+            <span class="wb-chip b">B: 1.6036</span>
+        </div>
+    <h3>Matrice RGB-XYZ</h3>
+<div class="matrix-display">  [ 0.57840, -0.02620, -0.08210]
+  [-0.75390,  1.50640,  0.26720]
+  [-0.19820,  0.26810,  0.74270]
+  [ 0.00000,  0.00000,  0.00000]</div><h3>Matrice de couleur</h3>
+<div class="matrix-display">  [ 1.90629, -1.05236,  0.14607,  0.00000]
+  [-0.04452,  1.42699, -0.38248,  0.00000]
+  [ 0.04220, -0.44925,  1.40705,  0.00000]</div><h3>Région 16×16 de la mosaïque</h3>
+
+        <div class="figure-container">
+            <img src="a0387-IMG_3388_zoom16x16.png" alt="Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré." class="clickable-image" data-fullsize="a0387-IMG_3388_zoom16x16.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré.</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Discussion</h2>
+            
+        <h3>Analyse des résultats</h3>
+        <p>
+            J'ai remarqué que mes images personnelles ont 14 bits de profondeur.
+            Celles fourni varie entre 12, 14 et même 16 bits pour le pelican. 
+            On comprend vite l'importance de la normalisation pour ramener
+            toutes ces valeurs dans un seul intervalle pour le traitement (float dans [0, 1]).
+        </p>
+        <p>
+            Aussi, en zoomant sur le 16x16, on peut voir le filtre de Bayer de l'image.
+            Chaque pixel ne contient l'information que d'une couleur (RGB). Les filtre change d'image en image.
+            L'image n'est pas encore dématricée donc le filtre est très apparent quand on zoom.
+        </p>
+        <p>
+            Finalement, le niveau de noir n'est jamais à 0 (le true black) dans les métadonnées.
+            J'assume que c'est le capteur qui capture de la lumière parasite.
+            Le code soustrait on offset avant la normalisation pour ça.
+        </p>
+        
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> a0389-KE_-0026</h2>
+            <h3>Métadonnées extraites</h3>
+<div class="metadata-grid">
+        <div class="metadata-card">
+            <h4>Motif de Bayer</h4>
+            <div class="value">GRBG</div>
+            <div class="bayer-grid"><div class="bayer-cell G">G</div><div class="bayer-cell R">R</div><div class="bayer-cell B">B</div><div class="bayer-cell G">G</div></div>
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Profondeur de bits</h4>
+            <div class="value">12 bits</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Dimensions</h4>
+            <div class="value">3032 × 2024 px</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Orientation (EXIF)</h4>
+            <div class="value">Pas de rotation</div>
+            
+        </div>
+    </div><h3>Niveaux de noir et de blanc</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Paramètre</th><th>Canal 0</th><th>Canal 1</th><th>Canal 2</th><th>Canal 3</th></tr></thead>
+            <tbody><tr><td>Niveau de noir</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>Niveau de blanc</td><td>4095</td><td>4095</td><td>4095</td><td>4095</td></tr>
+</tbody>
+        </table>
+    <h3>Formule de normalisation</h3>
+<div class="formula-box">normalized = (raw_value - black_level) / (white_level - black_level)</div><h3>Balance des blancs (caméra)</h3>
+
+        <div class="wb-values">
+            <span class="wb-chip r">R: 2.2695</span>
+            <span class="wb-chip g">G: 1.0000</span>
+            <span class="wb-chip b">B: 1.7031</span>
+        </div>
+    <h3>Matrice RGB-XYZ</h3>
+<div class="matrix-display">  [ 0.59020, -0.09330, -0.07820]
+  [-0.89830,  1.67190,  0.23540]
+  [-0.14020,  0.14550,  0.64640]
+  [ 0.00000,  0.00000,  0.00000]</div><h3>Matrice de couleur</h3>
+<div class="matrix-display">  [ 1.71086, -0.72103,  0.01018,  0.00000]
+  [ 0.01185,  1.24049, -0.25234,  0.00000]
+  [ 0.03846, -0.28831,  1.24985,  0.00000]</div><h3>Région 16×16 de la mosaïque</h3>
+
+        <div class="figure-container">
+            <img src="a0389-KE_-0026_zoom16x16.png" alt="Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré." class="clickable-image" data-fullsize="a0389-KE_-0026_zoom16x16.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré.</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Discussion</h2>
+            
+        <h3>Analyse des résultats</h3>
+        <p>
+            J'ai remarqué que mes images personnelles ont 14 bits de profondeur.
+            Celles fourni varie entre 12, 14 et même 16 bits pour le pelican. 
+            On comprend vite l'importance de la normalisation pour ramener
+            toutes ces valeurs dans un seul intervalle pour le traitement (float dans [0, 1]).
+        </p>
+        <p>
+            Aussi, en zoomant sur le 16x16, on peut voir le filtre de Bayer de l'image.
+            Chaque pixel ne contient l'information que d'une couleur (RGB). Les filtre change d'image en image.
+            L'image n'est pas encore dématricée donc le filtre est très apparent quand on zoom.
+        </p>
+        <p>
+            Finalement, le niveau de noir n'est jamais à 0 (le true black) dans les métadonnées.
+            J'assume que c'est le capteur qui capture de la lumière parasite.
+            Le code soustrait on offset avant la normalisation pour ça.
+        </p>
+        
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> a0491-2004-07-29 14-32-56 CRW_3077</h2>
+            <h3>Métadonnées extraites</h3>
+<div class="metadata-grid">
+        <div class="metadata-card">
+            <h4>Motif de Bayer</h4>
+            <div class="value">RGGB</div>
+            <div class="bayer-grid"><div class="bayer-cell R">R</div><div class="bayer-cell G">G</div><div class="bayer-cell G">G</div><div class="bayer-cell B">B</div></div>
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Profondeur de bits</h4>
+            <div class="value">12 bits</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Dimensions</h4>
+            <div class="value">3088 × 2055 px</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Orientation (EXIF)</h4>
+            <div class="value">90° anti-horaire</div>
+            
+        </div>
+    </div><h3>Niveaux de noir et de blanc</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Paramètre</th><th>Canal 0</th><th>Canal 1</th><th>Canal 2</th><th>Canal 3</th></tr></thead>
+            <tbody><tr><td>Niveau de noir</td><td>129</td><td>129</td><td>129</td><td>129</td></tr>
+<tr><td>Niveau de blanc</td><td>4000</td><td>4000</td><td>4000</td><td>4000</td></tr>
+</tbody>
+        </table>
+    <h3>Formule de normalisation</h3>
+<div class="formula-box">normalized = (raw_value - black_level) / (white_level - black_level)</div><h3>Balance des blancs (caméra)</h3>
+
+        <div class="wb-values">
+            <span class="wb-chip r">R: 2.1696</span>
+            <span class="wb-chip g">G: 1.0000</span>
+            <span class="wb-chip b">B: 1.1666</span>
+        </div>
+    <h3>Matrice RGB-XYZ</h3>
+<div class="matrix-display">  [ 0.82500, -0.20440, -0.11270]
+  [-0.80920,  1.56060,  0.26640]
+  [-0.28930,  0.34530,  0.83480]
+  [ 0.00000,  0.00000,  0.00000]</div><h3>Matrice de couleur</h3>
+<div class="matrix-display">  [ 1.55570, -0.59195,  0.03625,  0.00000]
+  [-0.02332,  1.38009, -0.35677,  0.00000]
+  [ 0.06781, -0.46077,  1.39296,  0.00000]</div><h3>Région 16×16 de la mosaïque</h3>
+
+        <div class="figure-container">
+            <img src="a0491-2004-07-29 14-32-56 CRW_3077_zoom16x16.png" alt="Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré." class="clickable-image" data-fullsize="a0491-2004-07-29 14-32-56 CRW_3077_zoom16x16.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré.</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Discussion</h2>
+            
+        <h3>Analyse des résultats</h3>
+        <p>
+            J'ai remarqué que mes images personnelles ont 14 bits de profondeur.
+            Celles fourni varie entre 12, 14 et même 16 bits pour le pelican. 
+            On comprend vite l'importance de la normalisation pour ramener
+            toutes ces valeurs dans un seul intervalle pour le traitement (float dans [0, 1]).
+        </p>
+        <p>
+            Aussi, en zoomant sur le 16x16, on peut voir le filtre de Bayer de l'image.
+            Chaque pixel ne contient l'information que d'une couleur (RGB). Les filtre change d'image en image.
+            L'image n'est pas encore dématricée donc le filtre est très apparent quand on zoom.
+        </p>
+        <p>
+            Finalement, le niveau de noir n'est jamais à 0 (le true black) dans les métadonnées.
+            J'assume que c'est le capteur qui capture de la lumière parasite.
+            Le code soustrait on offset avant la normalisation pour ça.
+        </p>
+        
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> a0507-kme_486</h2>
+            <h3>Métadonnées extraites</h3>
+<div class="metadata-grid">
+        <div class="metadata-card">
+            <h4>Motif de Bayer</h4>
+            <div class="value">GBRG</div>
+            <div class="bayer-grid"><div class="bayer-cell G">G</div><div class="bayer-cell B">B</div><div class="bayer-cell R">R</div><div class="bayer-cell G">G</div></div>
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Profondeur de bits</h4>
+            <div class="value">12 bits</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Dimensions</h4>
+            <div class="value">4432 × 3322 px</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Orientation (EXIF)</h4>
+            <div class="value">90° horaire</div>
+            
+        </div>
+    </div><h3>Niveaux de noir et de blanc</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Paramètre</th><th>Canal 0</th><th>Canal 1</th><th>Canal 2</th><th>Canal 3</th></tr></thead>
+            <tbody><tr><td>Niveau de noir</td><td>128</td><td>128</td><td>128</td><td>128</td></tr>
+<tr><td>Niveau de blanc</td><td>4095</td><td>4095</td><td>4095</td><td>4095</td></tr>
+</tbody>
+        </table>
+    <h3>Formule de normalisation</h3>
+<div class="formula-box">normalized = (raw_value - black_level) / (white_level - black_level)</div><h3>Balance des blancs (caméra)</h3>
+
+        <div class="wb-values">
+            <span class="wb-chip r">R: 1.5105</span>
+            <span class="wb-chip g">G: 1.0000</span>
+            <span class="wb-chip b">B: 1.9059</span>
+        </div>
+    <h3>Matrice RGB-XYZ</h3>
+<div class="matrix-display">  [ 1.10930, -0.39060, -0.10280]
+  [-0.50470,  1.24920,  0.28790]
+  [-0.10030,  0.17500,  0.55610]
+  [ 0.00000,  0.00000,  0.00000]</div><h3>Matrice de couleur</h3>
+<div class="matrix-display">  [ 1.51552, -0.37049, -0.14503,  0.00000]
+  [-0.13567,  1.65900, -0.52333,  0.00000]
+  [ 0.02123, -0.48881,  1.46758,  0.00000]</div><h3>Région 16×16 de la mosaïque</h3>
+
+        <div class="figure-container">
+            <img src="a0507-kme_486_zoom16x16.png" alt="Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré." class="clickable-image" data-fullsize="a0507-kme_486_zoom16x16.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré.</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Discussion</h2>
+            
+        <h3>Analyse des résultats</h3>
+        <p>
+            J'ai remarqué que mes images personnelles ont 14 bits de profondeur.
+            Celles fourni varie entre 12, 14 et même 16 bits pour le pelican. 
+            On comprend vite l'importance de la normalisation pour ramener
+            toutes ces valeurs dans un seul intervalle pour le traitement (float dans [0, 1]).
+        </p>
+        <p>
+            Aussi, en zoomant sur le 16x16, on peut voir le filtre de Bayer de l'image.
+            Chaque pixel ne contient l'information que d'une couleur (RGB). Les filtre change d'image en image.
+            L'image n'est pas encore dématricée donc le filtre est très apparent quand on zoom.
+        </p>
+        <p>
+            Finalement, le niveau de noir n'est jamais à 0 (le true black) dans les métadonnées.
+            J'assume que c'est le capteur qui capture de la lumière parasite.
+            Le code soustrait on offset avant la normalisation pour ça.
+        </p>
+        
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> a0552-GM6A8442</h2>
+            <h3>Métadonnées extraites</h3>
+<div class="metadata-grid">
+        <div class="metadata-card">
+            <h4>Motif de Bayer</h4>
+            <div class="value">RGGB</div>
+            <div class="bayer-grid"><div class="bayer-cell R">R</div><div class="bayer-cell G">G</div><div class="bayer-cell G">G</div><div class="bayer-cell B">B</div></div>
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Profondeur de bits</h4>
+            <div class="value">12 bits</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Dimensions</h4>
+            <div class="value">3522 × 2348 px</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Orientation (EXIF)</h4>
+            <div class="value">Pas de rotation</div>
+            
+        </div>
+    </div><h3>Niveaux de noir et de blanc</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Paramètre</th><th>Canal 0</th><th>Canal 1</th><th>Canal 2</th><th>Canal 3</th></tr></thead>
+            <tbody><tr><td>Niveau de noir</td><td>127</td><td>127</td><td>127</td><td>127</td></tr>
+<tr><td>Niveau de blanc</td><td>3700</td><td>3700</td><td>3700</td><td>3700</td></tr>
+</tbody>
+        </table>
+    <h3>Formule de normalisation</h3>
+<div class="formula-box">normalized = (raw_value - black_level) / (white_level - black_level)</div><h3>Balance des blancs (caméra)</h3>
+
+        <div class="wb-values">
+            <span class="wb-chip r">R: 2.0195</span>
+            <span class="wb-chip g">G: 1.0000</span>
+            <span class="wb-chip b">B: 1.1172</span>
+        </div>
+    <h3>Matrice RGB-XYZ</h3>
+<div class="matrix-display">  [ 0.62640, -0.05820, -0.07240]
+  [-0.83120,  1.59480,  0.25040]
+  [-0.17440,  0.19190,  0.86640]
+  [ 0.00000,  0.00000,  0.00000]</div><h3>Matrice de couleur</h3>
+<div class="matrix-display">  [ 1.87582, -0.87791,  0.00209,  0.00000]
+  [-0.01086,  1.30607, -0.29521,  0.00000]
+  [ 0.03576, -0.30443,  1.26867,  0.00000]</div><h3>Région 16×16 de la mosaïque</h3>
+
+        <div class="figure-container">
+            <img src="a0552-GM6A8442_zoom16x16.png" alt="Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré." class="clickable-image" data-fullsize="a0552-GM6A8442_zoom16x16.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré.</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Discussion</h2>
+            
+        <h3>Analyse des résultats</h3>
+        <p>
+            J'ai remarqué que mes images personnelles ont 14 bits de profondeur.
+            Celles fourni varie entre 12, 14 et même 16 bits pour le pelican. 
+            On comprend vite l'importance de la normalisation pour ramener
+            toutes ces valeurs dans un seul intervalle pour le traitement (float dans [0, 1]).
+        </p>
+        <p>
+            Aussi, en zoomant sur le 16x16, on peut voir le filtre de Bayer de l'image.
+            Chaque pixel ne contient l'information que d'une couleur (RGB). Les filtre change d'image en image.
+            L'image n'est pas encore dématricée donc le filtre est très apparent quand on zoom.
+        </p>
+        <p>
+            Finalement, le niveau de noir n'est jamais à 0 (le true black) dans les métadonnées.
+            J'assume que c'est le capteur qui capture de la lumière parasite.
+            Le code soustrait on offset avant la normalisation pour ça.
+        </p>
+        
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> a0563-IMG_0286</h2>
+            <h3>Métadonnées extraites</h3>
+<div class="metadata-grid">
+        <div class="metadata-card">
+            <h4>Motif de Bayer</h4>
+            <div class="value">RGGB</div>
+            <div class="bayer-grid"><div class="bayer-cell R">R</div><div class="bayer-cell G">G</div><div class="bayer-cell G">G</div><div class="bayer-cell B">B</div></div>
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Profondeur de bits</h4>
+            <div class="value">12 bits</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Dimensions</h4>
+            <div class="value">3906 × 2602 px</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Orientation (EXIF)</h4>
+            <div class="value">Pas de rotation</div>
+            
+        </div>
+    </div><h3>Niveaux de noir et de blanc</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Paramètre</th><th>Canal 0</th><th>Canal 1</th><th>Canal 2</th><th>Canal 3</th></tr></thead>
+            <tbody><tr><td>Niveau de noir</td><td>255</td><td>256</td><td>256</td><td>255</td></tr>
+<tr><td>Niveau de blanc</td><td>3726</td><td>3726</td><td>3726</td><td>3726</td></tr>
+</tbody>
+        </table>
+    <h3>Formule de normalisation</h3>
+<div class="formula-box">normalized = (raw_value - black_level) / (white_level - black_level)</div><h3>Balance des blancs (caméra)</h3>
+
+        <div class="wb-values">
+            <span class="wb-chip r">R: 2.2705</span>
+            <span class="wb-chip g">G: 1.0000</span>
+            <span class="wb-chip b">B: 1.4951</span>
+        </div>
+    <h3>Matrice RGB-XYZ</h3>
+<div class="matrix-display">  [ 0.70540, -0.15010, -0.09900]
+  [-0.81560,  1.55440,  0.28120]
+  [-0.12780,  0.14140,  0.77960]
+  [ 0.00000,  0.00000,  0.00000]</div><h3>Matrice de couleur</h3>
+<div class="matrix-display">  [ 1.60520, -0.67327,  0.06807,  0.00000]
+  [-0.00404,  1.34800, -0.34396,  0.00000]
+  [ 0.01750, -0.28167,  1.26416,  0.00000]</div><h3>Région 16×16 de la mosaïque</h3>
+
+        <div class="figure-container">
+            <img src="a0563-IMG_0286_zoom16x16.png" alt="Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré." class="clickable-image" data-fullsize="a0563-IMG_0286_zoom16x16.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré.</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Discussion</h2>
+            
+        <h3>Analyse des résultats</h3>
+        <p>
+            J'ai remarqué que mes images personnelles ont 14 bits de profondeur.
+            Celles fourni varie entre 12, 14 et même 16 bits pour le pelican. 
+            On comprend vite l'importance de la normalisation pour ramener
+            toutes ces valeurs dans un seul intervalle pour le traitement (float dans [0, 1]).
+        </p>
+        <p>
+            Aussi, en zoomant sur le 16x16, on peut voir le filtre de Bayer de l'image.
+            Chaque pixel ne contient l'information que d'une couleur (RGB). Les filtre change d'image en image.
+            L'image n'est pas encore dématricée donc le filtre est très apparent quand on zoom.
+        </p>
+        <p>
+            Finalement, le niveau de noir n'est jamais à 0 (le true black) dans les métadonnées.
+            J'assume que c'est le capteur qui capture de la lumière parasite.
+            Le code soustrait on offset avant la normalisation pour ça.
+        </p>
+        
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> a0693-NKIM_046</h2>
+            <h3>Métadonnées extraites</h3>
+<div class="metadata-grid">
+        <div class="metadata-card">
+            <h4>Motif de Bayer</h4>
+            <div class="value">RGGB</div>
+            <div class="bayer-grid"><div class="bayer-cell R">R</div><div class="bayer-cell G">G</div><div class="bayer-cell G">G</div><div class="bayer-cell B">B</div></div>
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Profondeur de bits</h4>
+            <div class="value">14 bits</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Dimensions</h4>
+            <div class="value">3908 × 2602 px</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Orientation (EXIF)</h4>
+            <div class="value">90° horaire</div>
+            
+        </div>
+    </div><h3>Niveaux de noir et de blanc</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Paramètre</th><th>Canal 0</th><th>Canal 1</th><th>Canal 2</th><th>Canal 3</th></tr></thead>
+            <tbody><tr><td>Niveau de noir</td><td>1024</td><td>1023</td><td>1024</td><td>1024</td></tr>
+<tr><td>Niveau de blanc</td><td>13600</td><td>13600</td><td>13600</td><td>13600</td></tr>
+</tbody>
+        </table>
+    <h3>Formule de normalisation</h3>
+<div class="formula-box">normalized = (raw_value - black_level) / (white_level - black_level)</div><h3>Balance des blancs (caméra)</h3>
+
+        <div class="wb-values">
+            <span class="wb-chip r">R: 2.3818</span>
+            <span class="wb-chip g">G: 1.0000</span>
+            <span class="wb-chip b">B: 1.3281</span>
+        </div>
+    <h3>Matrice RGB-XYZ</h3>
+<div class="matrix-display">  [ 0.60710, -0.07470, -0.08560]
+  [-0.76530,  1.53650,  0.24410]
+  [-0.20250,  0.25530,  0.73150]
+  [ 0.00000,  0.00000,  0.00000]</div><h3>Matrice de couleur</h3>
+<div class="matrix-display">  [ 1.78217, -0.86549,  0.08332,  0.00000]
+  [-0.04586,  1.37529, -0.32943,  0.00000]
+  [ 0.05309, -0.42022,  1.36713,  0.00000]</div><h3>Région 16×16 de la mosaïque</h3>
+
+        <div class="figure-container">
+            <img src="a0693-NKIM_046_zoom16x16.png" alt="Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré." class="clickable-image" data-fullsize="a0693-NKIM_046_zoom16x16.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré.</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Discussion</h2>
+            
+        <h3>Analyse des résultats</h3>
+        <p>
+            J'ai remarqué que mes images personnelles ont 14 bits de profondeur.
+            Celles fourni varie entre 12, 14 et même 16 bits pour le pelican. 
+            On comprend vite l'importance de la normalisation pour ramener
+            toutes ces valeurs dans un seul intervalle pour le traitement (float dans [0, 1]).
+        </p>
+        <p>
+            Aussi, en zoomant sur le 16x16, on peut voir le filtre de Bayer de l'image.
+            Chaque pixel ne contient l'information que d'une couleur (RGB). Les filtre change d'image en image.
+            L'image n'est pas encore dématricée donc le filtre est très apparent quand on zoom.
+        </p>
+        <p>
+            Finalement, le niveau de noir n'est jamais à 0 (le true black) dans les métadonnées.
+            J'assume que c'est le capteur qui capture de la lumière parasite.
+            Le code soustrait on offset avant la normalisation pour ça.
+        </p>
+        
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> pelican</h2>
+            <h3>Métadonnées extraites</h3>
+<div class="metadata-grid">
+        <div class="metadata-card">
+            <h4>Motif de Bayer</h4>
+            <div class="value">RGGB</div>
+            <div class="bayer-grid"><div class="bayer-cell R">R</div><div class="bayer-cell G">G</div><div class="bayer-cell G">G</div><div class="bayer-cell B">B</div></div>
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Profondeur de bits</h4>
+            <div class="value">16 bits</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Dimensions</h4>
+            <div class="value">1080 × 1920 px</div>
+            
+        </div>
+    
+        <div class="metadata-card">
+            <h4>Orientation (EXIF)</h4>
+            <div class="value">Pas de rotation</div>
+            
+        </div>
+    </div><h3>Niveaux de noir et de blanc</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Paramètre</th><th>Canal 0</th><th>Canal 1</th><th>Canal 2</th><th>Canal 3</th></tr></thead>
+            <tbody><tr><td>Niveau de noir</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>Niveau de blanc</td><td>65535</td><td>65535</td><td>65535</td><td>65535</td></tr>
+</tbody>
+        </table>
+    <h3>Formule de normalisation</h3>
+<div class="formula-box">normalized = (raw_value - black_level) / (white_level - black_level)</div><h3>Balance des blancs (caméra)</h3>
+
+        <div class="wb-values">
+            <span class="wb-chip r">R: 1.0000</span>
+            <span class="wb-chip g">G: 1.0000</span>
+            <span class="wb-chip b">B: 1.0000</span>
+        </div>
+    <h3>Matrice RGB-XYZ</h3>
+<div class="matrix-display">  [ 3.24045, -1.53714, -0.49853]
+  [-0.96927,  1.87601,  0.04156]
+  [ 0.05564, -0.20403,  1.05723]</div><h3>Matrice de couleur</h3>
+<div class="matrix-display">  [ 1.00000,  0.00000,  0.00000]
+  [ 0.00000,  1.00000,  0.00000]
+  [ 0.00000,  0.00000,  1.00000]</div><h3>Région 16×16 de la mosaïque</h3>
+
+        <div class="figure-container">
+            <img src="pelican_zoom16x16.png" alt="Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré." class="clickable-image" data-fullsize="pelican_zoom16x16.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré.</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Discussion</h2>
+            
+        <h3>Analyse des résultats</h3>
+        <p>
+            J'ai remarqué que mes images personnelles ont 14 bits de profondeur.
+            Celles fourni varie entre 12, 14 et même 16 bits pour le pelican. 
+            On comprend vite l'importance de la normalisation pour ramener
+            toutes ces valeurs dans un seul intervalle pour le traitement (float dans [0, 1]).
+        </p>
+        <p>
+            Aussi, en zoomant sur le 16x16, on peut voir le filtre de Bayer de l'image.
+            Chaque pixel ne contient l'information que d'une couleur (RGB). Les filtre change d'image en image.
+            L'image n'est pas encore dématricée donc le filtre est très apparent quand on zoom.
+        </p>
+        <p>
+            Finalement, le niveau de noir n'est jamais à 0 (le true black) dans les métadonnées.
+            J'assume que c'est le capteur qui capture de la lumière parasite.
+            Le code soustrait on offset avant la normalisation pour ça.
+        </p>
+        
+        </div>
+    
+        
+        <footer>
+            <p>GIF 4105/7105 &mdash; TP1 | Formation d'une image</p>
+        </footer>
+    </div>
+    
+    <script>
+        function openLightbox(img) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const fullSizeSrc = img.getAttribute('data-fullsize') || img.src;
+            lightboxImg.src = fullSizeSrc;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeLightbox(event) {
+            const lightbox = document.getElementById('lightbox');
+            // Only close if clicking on the background or close button
+            if (event.target === lightbox || event.target.classList.contains('lightbox-close')) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+        
+        // Close lightbox on Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const lightbox = document.getElementById('lightbox');
+                lightbox.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    </script>
+</body>
+</html>
