@@ -94,7 +94,43 @@ def demosaic_bilinear(raw_data, pattern_2x2):
     # `masks` est un dictionnaire avec les masques booléens pour 'R', 'G', 'B'
     # Indice: faites une convolution 2D avec les noyaux appropriés pour chaque canal.
 
-    raise NotImplementedError("Demosaic_bilinear à implémenter")
+
+    for i, color in enumerate("RGB"):
+        rgb[:, :, i][masks[color]] = raw_data[masks[color]] # Copie les données raw
+
+    K_croix = np.array([[0, 1, 0],
+                        [1, 0, 1],
+                        [0, 1, 0]]) / 4.0
+
+    K_diag = np.array([[1, 0, 1],
+                       [0, 0, 0],
+                       [1, 0, 1]]) / 4.0
+
+    K_horiz = np.array([[0, 0, 0],
+                        [1, 0, 1],
+                        [0, 0, 0]]) / 2.0 # Moyenne pour le contour
+
+    K_vert = np.array([[0, 1, 0],
+                       [0, 0, 0],
+                       [0, 1, 0]]) / 2.0 # Moyenne pour le contour
+
+    G_est = convolve2d(raw_data, K_croix, mode='same', boundary='symm') # Filtre pour le vert
+    mask_G_manquant = ~masks['G']
+    rgb[:, :, 1][mask_G_manquant] = G_est[mask_G_manquant]
+
+    for chan, color, opp in [(0, 'R', 'B'), (2, 'B', 'R')]: # Filtre pour le R ou B
+
+        diag_est = convolve2d(raw_data, K_diag, mode='same', boundary='symm') # Pour R ou B
+        rgb[:, :, chan][masks[opp]] = diag_est[masks[opp]]
+
+        # Pour G ça dépend de l'orientation
+        voisins = convolve2d(masks[color].astype(float), np.array([[0, 0, 0], [1, 0, 1], [0, 0, 0]]), mode='same') > 0
+        h_est = convolve2d(raw_data, K_horiz, mode='same', boundary='symm')
+        v_est = convolve2d(raw_data, K_vert, mode='same', boundary='symm')
+        mask_G_h = np.logical_and(masks['G'], voisins)  # G si ligne de couleur
+        mask_G_v = np.logical_and(masks['G'], ~voisins)  # G si colonne de couleur
+        rgb[:, :, chan][mask_G_h] = h_est[mask_G_h]
+        rgb[:, :, chan][mask_G_v] = v_est[mask_G_v]
     
     return rgb
 
@@ -132,25 +168,50 @@ def demosaic_malvar(raw_data, pattern_2x2):
     # =========================================================================
     # TODO: Implémenter les noyaux Malvar-He-Cutler 5×5
     # =========================================================================
-    #
-    # Exemple de structure pour les noyaux (à compléter avec les vraies valeurs):
-    #
-    # kernel_g_at_rb = np.array([
-    #     [0,  0, -1,  0,  0],
-    #     [0,  0,  2,  0,  0],
-    #     [-1, 2,  4,  2, -1],
-    #     [0,  0,  2,  0,  0],
-    #     [0,  0, -1,  0,  0]
-    # ], dtype=np.float32) / 8
-    #
-    # kernel_rb_at_g_same_row = ...
-    # kernel_rb_at_g_same_col = ...
-    # kernel_rb_at_opposite = ...
-    #
-    # Puis appliquer les convolutions appropriées selon les positions du motif.
-    # =========================================================================
 
-    raise NotImplementedError("Malvar-He-Cutler non implémenté")
+    for i, col in enumerate("RGB"):
+        rgb[:, :, i][masks[col]] = raw_data[masks[col]] # Copie les données raw
+
+    K_G_a_RB = np.array([
+           [0, 0, -1, 0, 0],
+           [0, 0, 2, 0, 0],
+           [-1, 2, 4, 2, -1],
+           [0, 0, 2, 0, 0],
+           [0, 0, -1, 0, 0]]) / 8.0
+
+    K_RB_a_BR = np.array([
+        [0, 0,-1.5, 0, 0],
+        [0, 2, 0, 2, 0],
+        [-1.5, 0, 6, 0,-1.5],
+        [0, 2, 0, 2, 0],
+        [0, 0,-1.5, 0, 0]]) / 8.0
+
+    K_R_a_G_row = np.array([
+            [0, 0, -1, 0, 0],
+            [0, 0, 0, 0, 0],
+            [-1, 4, 4, 4, -1],
+            [0, 0, 0, 0, 0],
+            [0, 0, -1, 0, 0]]) / 8.0
+    K_R_a_G_col = K_R_a_G_row.T
+
+    G_est = convolve2d(raw_data, K_G_a_RB, mode='same', boundary='symm') # Interpolation G
+    mask_RB = np.logical_or(masks['R'], masks['B'])
+    rgb[:, :, 1][mask_RB] = G_est[mask_RB]
+
+    for chan, col, opp in [(0, 'R', 'B'), (2, 'B', 'R')]: # Interpolation R et B
+        diag_est = convolve2d(raw_data, K_RB_a_BR, mode='same', boundary='symm')
+        rgb[:, :, chan][masks[opp]] = diag_est[masks[opp]]
+        est_h = convolve2d(raw_data, K_R_a_G_row, mode='same', boundary='symm')
+        est_v = convolve2d(raw_data, K_R_a_G_col, mode='same', boundary='symm')
+
+        has_h_neighbors = convolve2d(masks[col].astype(float), np.array([[0, 0, 0], [1, 0, 1], [0, 0, 0]]), mode='same') > 0
+        mask_G = masks['G']
+
+        mask_h = np.logical_and(mask_G, has_h_neighbors) # Cas horiz
+        rgb[:, :, chan][mask_h] = est_h[mask_h]
+
+        mask_v = np.logical_and(mask_G, ~has_h_neighbors) # Cas verti
+        rgb[:, :, chan][mask_v] = est_v[mask_v]
 
     return rgb
 
@@ -199,6 +260,19 @@ def generate_report(results, output_dir):
     )
 
     content = section("Algorithmes implémentés", algorithms, icon="📘")
+
+    discussion_text = """
+            Théoriquement, l'interpolation bilinéaire devrait présenter des artefacts visibles 
+            sur les contours nets. Cela est dû au fait qu'elle traite chaque canal indépendamment 
+            sans tenir compte de ce que les couleurs autours ont comme luminosité.
+            La méthode Malvar-Cutler devrait corriger cela en utilisant le gradient du canal vert 
+            pour faire l'interpolation du rouge et du bleu. Les deux algorithmes sont linéaire et donc peu couteux,
+            mais Malvar prend un temps un peu plus long. Cela est probablement dû au fait que la convolution se fait sur
+            des matrices plus larges. Cependant, quand je révise mes résultats
+            obtenus avec les algorithmes, la différence des artefacts semble négligeable, même en zoomant aux extrémités.
+            Tout de même, les photos ont l'allure attendue par le rematriçage."""
+
+    content += section("Discussion", discussion_text, icon="📘")
 
     for result in results:
         basename = result["basename"]
