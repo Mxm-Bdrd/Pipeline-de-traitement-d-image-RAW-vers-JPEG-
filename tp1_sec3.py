@@ -61,8 +61,6 @@ def find_neutral_region(image, region_size=11):
     Returns:
         (y, x): Position du centre de la meilleure région neutre
 
-    TODO: Implémenter l'algorithme de sélection automatique de région neutre
-
     Algorithme:
     1. Parcourir l'image par pas réguliers (ex: max(region_size, 20) pixels)
     2. Pour chaque région, calculer:
@@ -71,14 +69,32 @@ def find_neutral_region(image, region_size=11):
        - Score combiné: luminosité × neutralité
     3. Garder la région avec le meilleur score (si luminosité > 0.2)
     """
-    # =========================================================================
-    # TODO: Implémenter la sélection automatique de région neutre
-    # =========================================================================
+    H, W, _ = image.shape
+    step = max(region_size, 20) # 20 pixels
+    best_score = -1.0
+    best_pos = (0, 0)
 
-    raise NotImplementedError("Sélection automatique de région neutre à implémenter")
+    for y in range(0, H - region_size, step):
+        for x in range(0, W - region_size, step):
+
+            morceau = image[y: y + region_size, x: x + region_size, :]
+            moyennes = np.mean(morceau, axis=(0, 1)) # moyennes
+            r, g, b = moyennes
+            luminosite = 0.299 * r + 0.587 * g + 0.114 * b
+            if luminosite < 0.2: # Condition
+                continue
+
+            std_dev = np.std(moyennes)
+            neutre = 1.0 / (1.0 + std_dev * 10.0) # différence
+            score = luminosite * neutre
+            if score > best_score: # garde le meilleur
+                best_score = score
+                best_pos = (y, x)
+
+    return best_pos
 
 
-def white_balance_auto_neutral(image, region_size=11, target_gray=0.5):
+def white_balance_auto_neutral(image, region_size=11, gris=0.5):
     """
     Balance des blancs par sélection automatique de région neutre.
 
@@ -88,14 +104,12 @@ def white_balance_auto_neutral(image, region_size=11, target_gray=0.5):
     Args:
         image: Image RGB [H, W, 3] normalisée [0, 1]
         region_size: Taille de la région à analyser
-        target_gray: Valeur cible pour les neutres (0.5 par défaut)
+        gris: Valeur cible pour les neutres (0.5 par défaut)
 
     Returns:
         corrected: Image corrigée
         multipliers: Tuple (mult_R, mult_G, mult_B)
         neutral_pos: Position (y, x) de la région neutre sélectionnée
-
-    TODO: Implémenter la balance des blancs par région neutre automatique
 
     Indices:
     1. Utiliser find_neutral_region() pour trouver la région neutre
@@ -105,13 +119,16 @@ def white_balance_auto_neutral(image, region_size=11, target_gray=0.5):
     5. Appliquer les multiplicateurs à toute l'image
     6. Clipper à [0, 1]
     """
-    # =========================================================================
-    # TODO: Implémenter la balance des blancs par région neutre automatique
-    # =========================================================================
+    y, x = find_neutral_region(image, region_size)
+    morceau = image[y: y + region_size, x: x + region_size, :]
+    moyenne = np.mean(morceau, axis=(0, 1)) #calcul de la moyenne
 
-    neutral_pos = find_neutral_region(image, region_size)
+    multi = gris / moyenne
+    corrige = image * multi
+    corrige = np.clip(corrige, 0, 1)
+    mult_tuple = (multi[0], multi[1], multi[2]) # pour le rapport
 
-    raise NotImplementedError("Balance des blancs automatique à implémenter")
+    return corrige, mult_tuple, (y, x)
 
 
 def white_balance_grey_world(image):
@@ -128,8 +145,6 @@ def white_balance_grey_world(image):
         corrected: Image corrigée
         multipliers: Tuple (mult_R, mult_G, mult_B)
 
-    TODO: Implémenter l'algorithme Grey World
-
     Indices:
     1. Calculer la moyenne de chaque canal sur toute l'image
     2. Utiliser la moyenne du vert comme référence (canal le plus fiable en Bayer)
@@ -137,11 +152,17 @@ def white_balance_grey_world(image):
     4. Appliquer les multiplicateurs à toute l'image
     5. Clipper à [0, 1]
     """
-    # =========================================================================
-    # TODO: Implémenter l'algorithme Grey World
-    # =========================================================================
+    moyenne = np.mean(image, axis=(0, 1))
+    moyenne_r, moyenne_g, moyenne_b = moyenne
+    mult_r = moyenne_g / moyenne_r
+    mult_g = 1.0  # Le vert ne change pas
+    mult_b = moyenne_g / moyenne_b
+    multi = np.array([mult_r, mult_g, mult_b])
 
-    raise NotImplementedError("Grey World à implémenter")
+    corrige = image * multi
+    corrige = np.clip(corrige, 0, 1)
+
+    return corrige, (mult_r, mult_g, mult_b)
 
 
 def white_balance_camera(image, camera_wb):
@@ -216,22 +237,40 @@ def generate_report(results, output_dir):
     """Générer le rapport HTML pour la section 3."""
     algorithms = algorithm_box(
         "A) Sélection automatique de région neutre",
-        "<p>Trouve automatiquement une région lumineuse et neutre. Calcul: <code>mult_X = gris_cible / moyenne_X</code>. <strong>À IMPLÉMENTER</strong></p>",
+        "<p>Trouve automatiquement une région lumineuse et neutre. Calcul: <code>mult_X = gris_cible / moyenne_X</code>.</p>",
     )
     algorithms += algorithm_box(
         "B) Algorithme Grey World",
-        "<p>Mise à l'échelle pour que toutes les moyennes égalent celle du vert. <strong>À IMPLÉMENTER</strong></p>",
+        "<p>Mise à l'échelle pour que toutes les moyennes égalent celle du vert.</p>",
     )
     algorithms += algorithm_box(
         "C) Proposé par la caméra",
-        "<p>Multiplicateurs stockés dans les métadonnées RAW. <strong>IMPLÉMENTÉ</strong></p>",
+        "<p>Multiplicateurs stockés dans les métadonnées RAW.</p>",
     )
     algorithms += algorithm_box(
         "Conversion XYZ",
-        "<p>Camera RGB → XYZ via l'inverse normalisée de <code>rgb_xyz_matrix</code>. <strong>IMPLÉMENTÉ</strong></p>",
+        "<p>Camera RGB → XYZ via l'inverse normalisée de <code>rgb_xyz_matrix</code>.</p>",
     )
 
     content = section("Algorithmes implémentés", algorithms, icon="📘")
+
+    discussion_text = """
+    <p>
+        L'algorithme Grey World dit que la moyenne de tous les pixels 
+        de l'image est grise. Elle fonctionne bien pour les scènes standards, mais est très peu efficace
+        si l'image à une couleur dominante (comme une forêt par exemple).
+    </p>
+    <p>
+        La sélection automatique de région neutre cherche un objet blanc/gris 
+        dans la scène. Elle est souvent plus précise que le Grey World, mais marche uniquement si une zone blanc/gris existe. 
+    </p>
+    <p>
+        Selon mes résultats, l'algorithme de balance caméra obtient les meilleurs images. C'est l'algorithme qui utilise
+        les raw datas directement, donc donne un meilleur point de vue du moment qui à été capturé. La photo Ahsoka à cependant des régions
+        trop lumineuses où les lumières. Je crois que la balance caméra à de la misère avec les éclairage qui varie dans l'image.
+    </p>"""
+
+    content += section("Discussion", discussion_text, icon="📘")
 
     for result in results:
         basename = result["basename"]

@@ -310,26 +310,23 @@ def generate_report(results, output_dir):
 
         content += section(basename, section_content)
 
-        discussion_sec1 = """
-        <h3>Analyse des résultats</h3>
-        <p>
-            J'ai remarqué que mes images personnelles ont 14 bits de profondeur.
-            Celles fourni varie entre 12, 14 et même 16 bits pour le pelican. 
-            On comprend vite l'importance de la normalisation pour ramener
-            toutes ces valeurs dans un seul intervalle pour le traitement (float dans [0, 1]).
-        </p>
-        <p>
-            Aussi, en zoomant sur le 16x16, on peut voir le filtre de Bayer de l'image.
-            Chaque pixel ne contient l'information que d'une couleur (RGB). Les filtre change d'image en image.
-            L'image n'est pas encore dématricée donc le filtre est très apparent quand on zoom.
-        </p>
-        <p>
-            Finalement, le niveau de noir n'est jamais à 0 (le true black) dans les métadonnées.
-            J'assume que c'est le capteur qui capture de la lumière parasite.
-            Le code soustrait on offset avant la normalisation pour ça.
-        </p>
-        """
-        content += section("Discussion", discussion_sec1)
+    discussion_sec1 = """
+                J'ai remarqué que mes images personnelles ont 14 bits de profondeur.
+                Celles fourni varie entre 12, 14 et même 16 bits pour le pelican. 
+                On comprend vite l'importance de la normalisation pour ramener
+                toutes ces valeurs dans un seul intervalle pour le traitement (float dans [0, 1]).
+            <p>
+                Aussi, en zoomant sur le 16x16, on peut voir le filtre de Bayer de l'image.
+                Chaque pixel ne contient l'information que d'une couleur (RGB). Les filtre change d'image en image.
+                L'image n'est pas encore dématricée donc le filtre est très apparent quand on zoom.
+            </p>
+            <p>
+                Finalement, le niveau de noir n'est jamais à 0 (le true black) dans les métadonnées.
+                J'assume que c'est le capteur qui capture de la lumière parasite.
+                Le code soustrait on offset avant la normalisation pour ça.
+            </p>
+            """
+    content += section("Discussion", discussion_sec1)
 
     html = html_document(
         "TP1 - Section 1",
