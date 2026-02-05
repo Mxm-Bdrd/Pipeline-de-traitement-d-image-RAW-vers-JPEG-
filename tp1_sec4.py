@@ -67,8 +67,6 @@ def adjust_brightness(xyz_image, percentile=99):
     Returns:
         Image XYZ avec luminosité ajustée
 
-    TODO: Implémenter l'ajustement de luminosité
-
     Indices:
     1. Extraire le canal Y (luminance): Y = xyz_image[:, :, 1]
     2. Filtrer les valeurs valides (Y > 0)
@@ -76,9 +74,6 @@ def adjust_brightness(xyz_image, percentile=99):
     4. Diviser toute l'image par cette valeur
     5. Retourner l'image ajustée
     """
-    # =========================================================================
-    # TODO: Implémenter l'ajustement de luminosité par le 99e percentile
-    # =========================================================================
     Y = xyz_image[:, :, 1]
     
     # Compute the percentile of luminance (excluding zeros/negatives)
@@ -100,8 +95,9 @@ def adjust_brightness(xyz_image, percentile=99):
     
     return adjusted
 
-    raise NotImplementedError("Ajustement de luminosité à implémenter")
+    # raise NotImplementedError("Ajustement de luminosité à implémenter")
 
+    # L'ajustement de luminosité est déjà implémenté?
 
 # =============================================================================
 # Opérateurs de Mappage Tonal
@@ -137,8 +133,6 @@ def tonemap_reinhard(xyz_image):
     Returns:
         Image XYZ avec mappage tonal appliqué
 
-    TODO: Implémenter l'opérateur de Reinhard
-
     Indices:
     1. Extraire le canal Y (luminance): Y = xyz_image[:, :, 1]
     2. Appliquer la formule: Y_mapped = Y / (1 + Y)
@@ -146,13 +140,11 @@ def tonemap_reinhard(xyz_image):
     4. Appliquer ce ratio à X et Z également
     5. Retourner l'image résultante
     """
-    # =========================================================================
-    # TODO: Implémenter le mappage tonal de Reinhard
-    # =========================================================================
-    return xyz_image.copy()/(1 + xyz_image)
+    Y = xyz_image[:, :, 1]
+    Y_mapped = Y / (1.0 + Y)
+    scale = np.divide(Y_mapped, Y, out=np.ones_like(Y), where=Y > 1e-9)
 
-    raise NotImplementedError("Reinhard à implémenter")
-
+    return xyz_image * scale[:, :, np.newaxis]
 
 # =============================================================================
 # Sauvegarde d'Images
@@ -257,7 +249,7 @@ def generate_report(results, output_dir):
         basenames = list(set(basenames))  # Dédupliquer
     
     # Limiter à 2 images d'exemple pour rendre le rapport plus court
-    basenames = sorted(basenames)[:2]
+    basenames = sorted(basenames)[:3]
     content = ""
     
     # =============================================================================
@@ -269,9 +261,13 @@ def generate_report(results, output_dir):
     sec1_content += subsection(
         "Introduction",
         '<div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #4fc3f7;">'
-        '<p style="color: #a0a0a0; font-style: italic;">À remplir: Décrivez ici votre compréhension du format RAW, '
-        'du motif de Bayer, et de la normalisation des données brutes.</p>'
-        '</div>'
+        '<p style="color: #a0a0a0; font-style: italic;">'
+        '''Le format RAW contient les données brutes du capteur sans traitement. 
+        Ces données sont enregistrées en motif de Bayer, où chaque pixel ne capture qu'une seule couleur (R, G ou B). 
+        J'ai observé que les images brutes apparaissent très sombres car elles sont linéaires, le capteur compte les photons proportionnellement, et n'ont pas encore subi de correction. 
+        La normalisation est essentielle pour ramener les valeurs (dans mon cas sur 12, 14 et 16 bits) vers un intervalle [0, 1]. 
+        On soustrait aussi un petit niveau de noir du capteur pour contrer le bruit.'''
+        '</p></div>'
     )
     
     for basename in basenames:
@@ -293,9 +289,22 @@ def generate_report(results, output_dir):
     sec1_content += subsection(
         "Analyse et observations",
         '<div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #4fc3f7;">'
-        '<p style="color: #a0a0a0; font-style: italic;">À remplir: Décrivez vos observations sur les métadonnées extraites, '
-        'le motif de Bayer, et la normalisation.</p>'
-        '</div>'
+        '<p style="color: #a0a0a0; font-style: italic;">'
+        """
+                J'ai remarqué que mes images personnelles ont 14 bits de profondeur.
+                Celles fourni varie entre 12, 14 et même 16 bits pour le pelican. 
+                On comprend vite l'importance de la normalisation pour ramener
+                toutes ces valeurs dans un seul intervalle pour le traitement.
+            
+                Aussi, en zoomant sur le 16x16, on peut voir le filtre de Bayer de l'image.
+                Les filtre change d'image en image.
+                L'image n'est pas encore dématricée donc le filtre est très apparent quand on zoom.
+        
+                Finalement, le niveau de noir n'est jamais à 0 dans les métadonnées.
+                J'assume que c'est le capteur qui capture de la lumière parasite.
+                Le code soustrait on offset avant la normalisation pour ça.
+        """
+        '</p></div>'
     )
     
     content += section("Section 1: Chargement et Compréhension des Données RAW", sec1_content, icon="📷")
@@ -309,8 +318,14 @@ def generate_report(results, output_dir):
     sec2_content += subsection(
         "Introduction",
         '<div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #778da9;">'
-        '<p style="color: #a0a0a0; font-style: italic;">À remplir: Expliquez le processus de dématriçage, '
-        'les différences entre les méthodes bilinéaire et Malvar-He-Cutler, et les artefacts observés.</p>'
+        '<p style="color: #a0a0a0; font-style: italic;">'
+        "Le dématriçage consiste à interpoler les couleurs manquantes pour obtenir "
+        "une image RGB complète. La méthode bilinéaire est rapide mais elle donne des artefacts "
+        "de couleur sur les contours (visible quand on zoom). "
+        "La méthode Malvar améliore le résultat en utilisant la luminance pour "
+        "corriger l'interpolation des canaux rouge et bleu. "
+        "Visuellement, on voit donc des contours plus nets et moins d'artefacts de fausses couleurs."
+        '</p>'
         '</div>'
     )
     
@@ -342,8 +357,19 @@ def generate_report(results, output_dir):
     sec2_content += subsection(
         "Analyse et observations",
         '<div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #778da9;">'
-        '<p style="color: #a0a0a0; font-style: italic;">À remplir: Comparez les résultats des différentes méthodes de dématriçage. '
-        'Discutez des métriques de qualité (PSNR, SSIM) et des temps d\'exécution. Identifiez les régions où les artefacts sont les plus visibles.</p>'
+        '<p style="color: #a0a0a0; font-style: italic;">'
+        """
+            Théoriquement, l'interpolation bilinéaire devrait présenter des artefacts visibles 
+            sur les contours nets. Cela est dû au fait qu'elle traite chaque canal indépendamment 
+            sans tenir compte de ce que les couleurs autours ont comme luminosité.
+            La méthode Malvar-Cutler devrait corriger cela en utilisant le gradient du canal vert 
+            pour faire l'interpolation du rouge et du bleu. Les deux algorithmes sont linéaire et donc peu couteux,
+            mais Malvar prend un temps un peu plus long. Cela est probablement dû au fait que la convolution se fait sur
+            des matrices plus larges. Cependant, quand je révise mes résultats
+            obtenus avec les algorithmes, la différence des artefacts semble négligeable, même en zoomant aux extrémités.
+            Tout de même, les photos ont l'allure attendue par le rematriçage.
+        """
+        '</p>'
         '</div>'
     )
     
@@ -358,8 +384,12 @@ def generate_report(results, output_dir):
     sec3_content += subsection(
         "Introduction",
         '<div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #e94560;">'
-        '<p style="color: #a0a0a0; font-style: italic;">À remplir: Expliquez le concept de balance des blancs, '
-        'les différents algorithmes implémentés (région neutre, Grey World, caméra), et leurs avantages/inconvénients.</p>'
+        '<p style="color: #a0a0a0; font-style: italic;">'
+        "La balance des blancs sert à corriger la teinte globale de l'image pour "
+        "que les objets neutres soit gris. L'algorithme Grey World dit que la moyenne de l'image "
+        "est grise, ce qui est mauvais pour les images avec une couleur dominante (comme ma photo de forêt verte). "
+        "La méthode de la région neutre automatique est meilleure si une zone blanche est présente. "
+        '</p>'
         '</div>'
     )
     
@@ -391,8 +421,17 @@ def generate_report(results, output_dir):
     sec3_content += subsection(
         "Analyse et observations",
         '<div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #e94560;">'
-        '<p style="color: #a0a0a0; font-style: italic;">À remplir: Comparez les résultats des différentes méthodes de balance des blancs. '
-        'Discutez des multiplicateurs calculés et de leur impact visuel. Expliquez la conversion vers l\'espace XYZ.</p>'
+        '<p style="color: #a0a0a0; font-style: italic;">'
+    """
+        Les multiplicateurs me dise la couleur dominante de la source lumineuse. 
+        Par exemple, pour ma photo Ahsoka, cela signifie que le capteur a reçu beaucoup de rouge et qu'il faut le diminuer pour équilibrer l'image. 
+        Ensuite, selon mes résultats, avec l'algorithme Malvar, l'algorithme de balance caméra obtient les meilleurs images. C'est l'algorithme qui utilise
+        les raw datas directement, donc donne un meilleur point de vue du moment qui à été capturé. La photo Ahsoka à cependant des régions
+        trop lumineuses où les lumières. Je crois que la balance caméra à de la misère avec les éclairage qui varie dans l'image.
+        La conversion vers l'espace XYZ standardise les couleurs
+        peut importe pour quel appareil, ce qui est nécessaire avant de convertir vers le sRGB.
+    """
+        '</p>'
         '</div>'
     )
     
@@ -407,33 +446,41 @@ def generate_report(results, output_dir):
     sec4_content += subsection(
         "Introduction",
         '<div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #778da9;">'
-        '<p style="color: #a0a0a0; font-style: italic;">À remplir: Expliquez le besoin du mappage tonal, '
-        'les différents opérateurs (linéaire, Reinhard), l\'OETF sRGB, et l\'analyse de la plage dynamique.</p>'
+        '<p style="color: #a0a0a0; font-style: italic;">'
+        "Le mappage tonal adapte la grande plage dynamique du capteur (comme HDR)"
+        "à l'affichage limité. "
+        "L'opérateur linéaire coupe les hautes lumières mais en "
+        "perdant les détails dans les zones claires. L'opérateur de Reinhard compresse ces hautes "
+        "lumières avec une courbe non-linéaire, préservant les détails. L'OETF sRGB applique "
+        " une correction gamma pour que la luminosité "
+        "perçue soit correcte. Finalament, la compression JPEG fait apparaître des artefacts de blocs visibles "
+        "à cause de la perte d'information des hautes fréquences dans la compression."
+        '</p>'
         '</div>'
     )
     
     # Concepts et algorithmes
     algorithms = algorithm_box(
         "A) Ajustement de luminosité",
-        "<p>Division par le 99e percentile. <strong>À IMPLÉMENTER</strong></p>",
+        "<p>Division par le 99e percentile.</p>",
     )
     algorithms += algorithm_box(
         "B) Mappage tonal",
         "<p><b>Linéaire:</b> Pas de compression.</p>"
-        "<p><b>Reinhard:</b> <code>L_out = L_in / (1 + L_in)</code>. <strong>À IMPLÉMENTER</strong></p>",
+        "<p><b>Reinhard:</b> <code>L_out = L_in / (1 + L_in)</code>.</p>",
     )
     algorithms += algorithm_box(
         "C) Conversion XYZ → sRGB",
-        "<p>Matrice standard D65 suivie de l'OETF sRGB. <strong>IMPLÉMENTÉ</strong></p>",
+        "<p>Matrice standard D65 suivie de l'OETF sRGB.</p>",
     )
     algorithms += algorithm_box(
         "D) OETF sRGB",
         formula_box("sRGB = 1.055 × linéaire^(1/2.4) − 0.055")
-        + "<p><strong>IMPLÉMENTÉ</strong></p>",
+
     )
     algorithms += algorithm_box(
         "E) Analyse des artefacts JPEG",
-        "<p>Sauvegarde en différentes qualités et analyse des artefacts. <strong>À IMPLÉMENTER PAR L'ÉTUDIANT</strong></p>",
+        "<p>Sauvegarde en différentes qualités et analyse des artefacts.</p>",
     )
     
     sec4_content += subsection("Concepts et algorithmes", algorithms)
@@ -515,6 +562,31 @@ def generate_report(results, output_dir):
                     f"{basename}_dynamic_range.png", "Analyse des hautes lumières et ombres"
                 ) + dr_table,
             )
+            jpeg_metrics = result.get("jpeg_metrics", [])
+            if jpeg_metrics:
+                rows = []
+                for m in jpeg_metrics:
+                    rows.append([
+                        f"JPEG Q={m['quality']}",
+                        f"{m['size_kb']:.1f} KB",
+                        f"{m['compression_ratio']:.1f}:1",
+                        f"{m['psnr']:.2f} dB"
+                    ])
+                jpeg_table = table(
+                    ["Qualité", "Taille", "Ratio", "PSNR"],
+                    rows
+                )
+                sec4_img_content += subsection(
+                    "Analyse de compression JPEG",
+                    jpeg_table
+                )
+
+                artifacts_path = os.path.join(sec4_dir, f"{basename}_jpeg_artifacts.png")
+                if os.path.exists(artifacts_path):
+                    sec4_img_content += subsection(
+                        "Artefacts visuels (Zoom)",
+                        figure(f"{basename}_jpeg_artifacts.png", "Comparaison visuelle: Référence vs JPEG Q=25")
+                    )
         
         if sec4_img_content:
             sec4_content += section(basename, sec4_img_content)
@@ -523,9 +595,17 @@ def generate_report(results, output_dir):
     sec4_content += subsection(
         "Analyse et observations", 
         '<div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #778da9;">'
-        '<p style="color: #a0a0a0; font-style: italic;">À remplir: Comparez les résultats des différents opérateurs de mappage tonal. '
-        'Discutez de l\'impact de l\'OETF sur l\'apparence de l\'image. Analysez la plage dynamique et les zones écrêtées/écrasées. '
-        'Discutez des artefacts JPEG à différentes qualités.</p>'
+        '<p style="color: #a0a0a0; font-style: italic;">'
+        '''Comme discuté dans l'introduction, le mappage linéaire coupe les hautes lumières. On peut voir dans les photos les zones"
+        "coupés. Les données nous dise 0.60% pour Ahsoka, ce qui est très faible donc peu de perte d'information."
+        "Sans l'OETF sRGB, l'image linéaire est sombre et manque de lumière. L'OETF restaure la perception naturelle de la luminosité. L'image finale affiche une plage dynamique de 6.9 stops. 
+        Les ombres sont plus écrasées (1.78%) que les hautes lumières. 
+        Cela est probablement à cause du storage 8 bits qui ne peut pas contenir toute la plage dynamique capturée par le capteur (16 bits).
+        Le tableau montre le compromis taille/qualité. 
+        À Q=95, la qualité est maximale (PSNR 30.8 dB) mais le fichier est lourd (7.6 MB). 
+        À Q=25, la compression est immense (63:1) et le fichier est de seulement 542 KB, mais la qualité visuelle n'est pas bonne (PSNR 27.35 dB et des artefacts de blocs sur les contours). 
+        Je crois que Q=75 offre le meilleur compromis.'''
+        '</p>'
         '</div>'
     )
     
@@ -580,9 +660,22 @@ def generate_report(results, output_dir):
     conclusion_content = subsection(
         "Conclusion",
         '<div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #ffd54f;">'
-        '<p style="color: #a0a0a0; font-style: italic;">À remplir: Faites une synthèse de votre travail sur les quatre sections. '
-        'Discutez des défis rencontrés, des apprentissages, et des améliorations possibles. '
-        'Comparez vos résultats avec les images de référence.</p>'
+        '<p style="color: #a0a0a0; font-style: italic;">'
+        '''
+        Le pipeline a permis de refaire la formation d'une image à partir des données raw venant d'une capteur.
+        Dans mon cas, j'utilisais un Canon EOS REBEL T3i avec les réglage suivant : 
+        - ISO-2500
+        - F-stop f/2
+        - Exposure time 1/160 sec
+        - Bias 0 step
+        - Metering mode Pattern
+        En partant des données brutes du capteur, j'ai fait la normalisation, dématriçage, balance des blancs, et mappage tonal.
+        J'ai constater l'importance du mappage tonal (Reinhard) pour compresser la dynamique 14 bits vers l'affichage 8 bits sans perdre les hautes lumières.
+        La qualité est beaucoup moins bonne avec les pertes d'informations.
+        Finalement, en comparant, mes images sorties du pipeline sont très semblables aux références, 
+        quoique que les miennes semble trop clair.
+        '''
+        '</p>'
         '</div>'
     )
     
@@ -590,7 +683,7 @@ def generate_report(results, output_dir):
     
     # Générer le document HTML final
     html = html_document(
-        "Rapport TP1 - &lt;votre nom&gt;",
+        "Rapport TP1 - Maxime Bédard",
         "",
         "📸",
         content,
@@ -687,12 +780,38 @@ def process_display_encoding(
             final_jpg = os.path.join(output_dir, f"{basename}_final.jpg")
             save_jpeg(img_8bit, final_jpg, quality=95)
 
-            # TODO: L'étudiant doit implémenter l'analyse des artefacts JPEG
             # - Sauvegarder en différentes qualités (95, 75, 50, 25)
             # - Comparer avec PNG (sans perte)
             # - Visualiser les artefacts de compression
             # - Créer un graphique taille vs qualité
-            print("  [!] Analyse JPEG à implémenter par l'étudiant")
+            print("  [!] Analyse des artefacts JPEG...")
+            ref_png = os.path.join(output_dir, f"{basename}_ref.png") # png
+            save_png(img_8bit, ref_png)
+
+            ref_taille_kb = os.path.getsize(ref_png) / 1024.0 # la taille de l'image
+            img_ref_float = img_8bit.astype(np.float32) / 255.0 #float
+
+            jpeg_data = []
+            qualites = [95, 75, 50, 25]
+            for q in qualites:
+                jpg_path = os.path.join(output_dir, f"{basename}_q{q}.jpg") # sauvegarde
+                save_jpeg(img_8bit, jpg_path, quality=q)
+                taille_kb = os.path.getsize(jpg_path) / 1024.0
+                ratio = ref_taille_kb / taille_kb if taille_kb > 0 else 0
+
+                img_jpg_loaded = np.array(Image.open(jpg_path)).astype(np.float32) / 255.0
+                mse = np.mean((img_ref_float - img_jpg_loaded) ** 2)
+                if mse == 0:
+                    psnr = float('inf')
+                else:
+                    psnr = 10 * np.log10(1.0 / mse)
+                jpeg_data.append({
+                    "quality": q,
+                    "size_kb": taille_kb,
+                    "psnr": psnr,
+                    "compression_ratio": ratio
+                })
+            result["jpeg_metrics"] = jpeg_data
 
             # Analyse de plage dynamique
             print("  [D] Analyse de plage dynamique...")

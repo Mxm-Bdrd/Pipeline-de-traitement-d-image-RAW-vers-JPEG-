@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TP1 - Section 3</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap');
+        
+        * { box-sizing: border-box; }
+        
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e8e8e8;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            margin-bottom: 40px;
+        }
+        
+        .student-name-field {
+            background: rgba(255,255,255,0.05);
+            border: 2px dashed rgba(255,255,255,0.3);
+            border-radius: 8px;
+            padding: 15px 25px;
+            margin: 20px auto;
+            max-width: 500px;
+            text-align: left;
+        }
+        
+        .student-name-field label {
+            display: block;
+            color: #a0a0a0;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+        
+        .student-name-field input {
+            width: 100%;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 4px;
+            padding: 10px 15px;
+            color: #fff;
+            font-size: 1em;
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+        
+        .student-name-field input:focus {
+            outline: none;
+            border-color: #e94560;
+            box-shadow: 0 0 0 2px #e9456040;
+        }
+        
+        .student-name-field input::placeholder {
+            color: #666;
+            font-style: italic;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #fff;
+            margin: 0 0 15px 0;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: #a0a0a0;
+            margin: 0;
+        }
+        
+        .date-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 20px;
+            border-radius: 20px;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #b0b0b0;
+        }
+        
+        .image-section {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        
+        .image-section h2 {
+            color: #e94560;
+            font-size: 1.6em;
+            margin: 0 0 25px 0;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9456040;
+        }
+        
+        h3 {
+            color: #e0e1dd;
+            font-size: 1.3em;
+            margin: 30px 0 20px 0;
+        }
+        
+        h3::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 24px;
+            background: #e94560;
+            margin-right: 12px;
+            border-radius: 2px;
+            vertical-align: middle;
+        }
+        
+        .algorithm-box {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #e94560;
+        }
+        
+        .algorithm-box h4 {
+            color: #e94560;
+            margin: 0 0 10px 0;
+        }
+        
+        .algorithm-box p {
+            margin: 5px 0;
+            line-height: 1.6;
+        }
+        
+        .metrics-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .metrics-table th {
+            background: #e9456030;
+            color: #e94560;
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+        }
+        
+        .metrics-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95em;
+        }
+        
+        .metrics-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .metrics-table tr:hover {
+            background: rgba(255,255,255,0.03);
+        }
+        
+        .figure-container {
+            text-align: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+        }
+        
+        .figure-container img {
+            max-width: 60%;
+            max-height: 400px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .figure-container img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 30px rgba(0,0,0,0.5);
+        }
+        
+        .figure-caption {
+            margin-top: 10px;
+            font-style: italic;
+            color: #a0a0a0;
+            font-size: 0.9em;
+        }
+        
+        /* Lightbox/Modal styles */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            animation: fadeIn 0.3s;
+        }
+        
+        .lightbox.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .lightbox-content {
+            max-width: 95vw;
+            max-height: 95vh;
+            margin: auto;
+            animation: zoomIn 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 95vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.8);
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .lightbox-close:hover {
+            color: #ffc107;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        /* Image grid styles */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .image-grid-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .image-grid-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+        }
+        
+        .image-grid-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .image-grid-item .image-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: #fff;
+            padding: 15px 10px 10px;
+            font-size: 0.9em;
+            text-align: center;
+        }
+        
+        /* Comparison grid styles */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .comparison-pair {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .comparison-pair-title {
+            text-align: center;
+            color: #fff;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+        }
+        
+        .comparison-images {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .comparison-image-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .comparison-image-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+        }
+        
+        .comparison-image-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .comparison-image-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            color: #fff;
+            padding: 12px 8px 8px;
+            font-size: 0.85em;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .metadata-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .metadata-card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #e94560;
+        }
+        
+        .metadata-card h4 {
+            color: #e94560;
+            margin: 0 0 12px 0;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .metadata-card .value {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1em;
+            color: #fff;
+            word-break: break-all;
+        }
+        
+        .formula-box {
+            background: rgba(0,0,0,0.4);
+            padding: 20px 25px;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1em;
+            text-align: center;
+            margin: 20px 0;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #ffd54f;
+        }
+        
+        .matrix-display {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85em;
+            overflow-x: auto;
+            white-space: pre;
+            color: #b0bec5;
+        }
+        
+        .bayer-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 40px);
+            gap: 4px;
+            margin-top: 10px;
+        }
+        
+        .bayer-cell {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .bayer-cell.R { background: linear-gradient(135deg, #f44336, #c62828); }
+        .bayer-cell.G { background: linear-gradient(135deg, #4caf50, #2e7d32); }
+        .bayer-cell.B { background: linear-gradient(135deg, #2196f3, #1565c0); }
+        
+        .wb-values {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        
+        .wb-chip {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-family: 'Fira Code', monospace;
+            font-weight: 500;
+        }
+        
+        .wb-chip.r { background: rgba(244, 67, 54, 0.3); color: #ef9a9a; }
+        .wb-chip.g { background: rgba(76, 175, 80, 0.3); color: #a5d6a7; }
+        .wb-chip.b { background: rgba(33, 150, 243, 0.3); color: #90caf9; }
+        
+        code {
+            background: #e9456020;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9em;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+        <span class="lightbox-close">&times;</span>
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="">
+        </div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1>⚪ TP1 - Section 3</h1>
+            <p class="subtitle">Balance des Blancs (White Balance)</p>
+            <div class="date-badge">Généré le 04 February 2026 à 18:56</div>
+        </header>
+        
+        
+        <div class="image-section">
+            <h2><span class="icon">📘</span> Algorithmes implémentés</h2>
+            
+        <div class="algorithm-box">
+            <h4>A) Sélection automatique de région neutre</h4>
+            <p>Trouve automatiquement une région lumineuse et neutre. Calcul: <code>mult_X = gris_cible / moyenne_X</code>.</p>
+        </div>
+    
+        <div class="algorithm-box">
+            <h4>B) Algorithme Grey World</h4>
+            <p>Mise à l'échelle pour que toutes les moyennes égalent celle du vert.</p>
+        </div>
+    
+        <div class="algorithm-box">
+            <h4>C) Proposé par la caméra</h4>
+            <p>Multiplicateurs stockés dans les métadonnées RAW.</p>
+        </div>
+    
+        <div class="algorithm-box">
+            <h4>Conversion XYZ</h4>
+            <p>Camera RGB → XYZ via l'inverse normalisée de <code>rgb_xyz_matrix</code>.</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📘</span> Discussion</h2>
+            
+    <p>
+        L'algorithme Grey World dit que la moyenne de tous les pixels 
+        de l'image est grise. Elle fonctionne bien pour les scènes standards, mais est très peu efficace
+        si l'image à une couleur dominante (comme une forêt par exemple).
+    </p>
+    <p>
+        La sélection automatique de région neutre cherche un objet blanc/gris 
+        dans la scène. Elle est souvent plus précise que le Grey World, mais marche uniquement si une zone blanc/gris existe. 
+    </p>
+    <p>
+        Selon mes résultats, avec l'algorithme Malvar, l'algorithme de balance caméra obtient les meilleurs images. C'est l'algorithme qui utilise
+        les raw datas directement, donc donne un meilleur point de vue du moment qui à été capturé. La photo Ahsoka à cependant des régions
+        trop lumineuses où les lumières. Je crois que la balance caméra à de la misère avec les éclairage qui varie dans l'image.
+    </p>
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Ahsoka</h2>
+            <h3>Image originale</h3>
+
+        <div class="figure-container">
+            <img src="Ahsoka_original.jpg" alt="Image dématricée sans balance des blancs" class="clickable-image" data-fullsize="Ahsoka_original.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Image dématricée sans balance des blancs</p>
+        </div>
+    <h3>Multiplicateurs de correction</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Méthode</th><th>Mult. R</th><th>Mult. G</th><th>Mult. B</th></tr></thead>
+            <tbody><tr><td>A) Auto Neutre À impl.</td><td>0.5000</td><td>0.5000</td><td>0.5000</td></tr>
+<tr><td>B) Grey World À impl.</td><td>1.6392</td><td>1.0000</td><td>1.8685</td></tr>
+<tr><td>C) Caméra ✓</td><td>1.8281</td><td>1.0000</td><td>1.7930</td></tr>
+</tbody>
+        </table>
+    <h3>C) Balance caméra</h3>
+
+        <div class="figure-container">
+            <img src="Ahsoka_camera.jpg" alt="Résultat avec balance des blancs de la caméra" class="clickable-image" data-fullsize="Ahsoka_camera.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Résultat avec balance des blancs de la caméra</p>
+        </div>
+    <h3>Comparaison</h3>
+
+        <div class="figure-container">
+            <img src="Ahsoka_comparison.png" alt="Comparaison des méthodes de balance des blancs" class="clickable-image" data-fullsize="Ahsoka_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison des méthodes de balance des blancs</p>
+        </div>
+    <h3>Conversion XYZ</h3>
+
+        <div class="figure-container">
+            <img src="Ahsoka_xyz_comparison.png" alt="Images converties en XYZ puis reconverties en sRGB" class="clickable-image" data-fullsize="Ahsoka_xyz_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Images converties en XYZ puis reconverties en sRGB</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Antoine</h2>
+            <h3>Image originale</h3>
+
+        <div class="figure-container">
+            <img src="Antoine_original.jpg" alt="Image dématricée sans balance des blancs" class="clickable-image" data-fullsize="Antoine_original.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Image dématricée sans balance des blancs</p>
+        </div>
+    <h3>Multiplicateurs de correction</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Méthode</th><th>Mult. R</th><th>Mult. G</th><th>Mult. B</th></tr></thead>
+            <tbody><tr><td>A) Auto Neutre À impl.</td><td>0.9243</td><td>0.6558</td><td>1.5340</td></tr>
+<tr><td>B) Grey World À impl.</td><td>1.0022</td><td>1.0000</td><td>2.1820</td></tr>
+<tr><td>C) Caméra ✓</td><td>1.7266</td><td>1.0000</td><td>1.8682</td></tr>
+</tbody>
+        </table>
+    <h3>C) Balance caméra</h3>
+
+        <div class="figure-container">
+            <img src="Antoine_camera.jpg" alt="Résultat avec balance des blancs de la caméra" class="clickable-image" data-fullsize="Antoine_camera.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Résultat avec balance des blancs de la caméra</p>
+        </div>
+    <h3>Comparaison</h3>
+
+        <div class="figure-container">
+            <img src="Antoine_comparison.png" alt="Comparaison des méthodes de balance des blancs" class="clickable-image" data-fullsize="Antoine_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison des méthodes de balance des blancs</p>
+        </div>
+    <h3>Conversion XYZ</h3>
+
+        <div class="figure-container">
+            <img src="Antoine_xyz_comparison.png" alt="Images converties en XYZ puis reconverties en sRGB" class="clickable-image" data-fullsize="Antoine_xyz_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Images converties en XYZ puis reconverties en sRGB</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> BoisDeCoulonge</h2>
+            <h3>Image originale</h3>
+
+        <div class="figure-container">
+            <img src="BoisDeCoulonge_original.jpg" alt="Image dématricée sans balance des blancs" class="clickable-image" data-fullsize="BoisDeCoulonge_original.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Image dématricée sans balance des blancs</p>
+        </div>
+    <h3>Multiplicateurs de correction</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Méthode</th><th>Mult. R</th><th>Mult. G</th><th>Mult. B</th></tr></thead>
+            <tbody><tr><td>A) Auto Neutre À impl.</td><td>0.5000</td><td>0.5000</td><td>0.5000</td></tr>
+<tr><td>B) Grey World À impl.</td><td>1.8719</td><td>1.0000</td><td>2.4085</td></tr>
+<tr><td>C) Caméra ✓</td><td>1.9502</td><td>1.0000</td><td>1.9502</td></tr>
+</tbody>
+        </table>
+    <h3>C) Balance caméra</h3>
+
+        <div class="figure-container">
+            <img src="BoisDeCoulonge_camera.jpg" alt="Résultat avec balance des blancs de la caméra" class="clickable-image" data-fullsize="BoisDeCoulonge_camera.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Résultat avec balance des blancs de la caméra</p>
+        </div>
+    <h3>Comparaison</h3>
+
+        <div class="figure-container">
+            <img src="BoisDeCoulonge_comparison.png" alt="Comparaison des méthodes de balance des blancs" class="clickable-image" data-fullsize="BoisDeCoulonge_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison des méthodes de balance des blancs</p>
+        </div>
+    <h3>Conversion XYZ</h3>
+
+        <div class="figure-container">
+            <img src="BoisDeCoulonge_xyz_comparison.png" alt="Images converties en XYZ puis reconverties en sRGB" class="clickable-image" data-fullsize="BoisDeCoulonge_xyz_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Images converties en XYZ puis reconverties en sRGB</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> a0011-DSC_0082</h2>
+            <h3>Image originale</h3>
+
+        <div class="figure-container">
+            <img src="a0011-DSC_0082_original.jpg" alt="Image dématricée sans balance des blancs" class="clickable-image" data-fullsize="a0011-DSC_0082_original.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Image dématricée sans balance des blancs</p>
+        </div>
+    <h3>Multiplicateurs de correction</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Méthode</th><th>Mult. R</th><th>Mult. G</th><th>Mult. B</th></tr></thead>
+            <tbody><tr><td>A) Auto Neutre À impl.</td><td>2.7706</td><td>1.4291</td><td>2.7264</td></tr>
+<tr><td>B) Grey World À impl.</td><td>1.9116</td><td>1.0000</td><td>1.8020</td></tr>
+<tr><td>C) Caméra ✓</td><td>1.8649</td><td>1.0000</td><td>1.7939</td></tr>
+</tbody>
+        </table>
+    <h3>C) Balance caméra</h3>
+
+        <div class="figure-container">
+            <img src="a0011-DSC_0082_camera.jpg" alt="Résultat avec balance des blancs de la caméra" class="clickable-image" data-fullsize="a0011-DSC_0082_camera.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Résultat avec balance des blancs de la caméra</p>
+        </div>
+    <h3>Comparaison</h3>
+
+        <div class="figure-container">
+            <img src="a0011-DSC_0082_comparison.png" alt="Comparaison des méthodes de balance des blancs" class="clickable-image" data-fullsize="a0011-DSC_0082_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison des méthodes de balance des blancs</p>
+        </div>
+    <h3>Conversion XYZ</h3>
+
+        <div class="figure-container">
+            <img src="a0011-DSC_0082_xyz_comparison.png" alt="Images converties en XYZ puis reconverties en sRGB" class="clickable-image" data-fullsize="a0011-DSC_0082_xyz_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Images converties en XYZ puis reconverties en sRGB</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> a0018-kme_234</h2>
+            <h3>Image originale</h3>
+
+        <div class="figure-container">
+            <img src="a0018-kme_234_original.jpg" alt="Image dématricée sans balance des blancs" class="clickable-image" data-fullsize="a0018-kme_234_original.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Image dématricée sans balance des blancs</p>
+        </div>
+    <h3>Multiplicateurs de correction</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Méthode</th><th>Mult. R</th><th>Mult. G</th><th>Mult. B</th></tr></thead>
+            <tbody><tr><td>A) Auto Neutre À impl.</td><td>2.7112</td><td>1.3547</td><td>1.9256</td></tr>
+<tr><td>B) Grey World À impl.</td><td>1.7560</td><td>1.0000</td><td>1.5370</td></tr>
+<tr><td>C) Caméra ✓</td><td>1.9360</td><td>1.0000</td><td>1.4493</td></tr>
+</tbody>
+        </table>
+    <h3>C) Balance caméra</h3>
+
+        <div class="figure-container">
+            <img src="a0018-kme_234_camera.jpg" alt="Résultat avec balance des blancs de la caméra" class="clickable-image" data-fullsize="a0018-kme_234_camera.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Résultat avec balance des blancs de la caméra</p>
+        </div>
+    <h3>Comparaison</h3>
+
+        <div class="figure-container">
+            <img src="a0018-kme_234_comparison.png" alt="Comparaison des méthodes de balance des blancs" class="clickable-image" data-fullsize="a0018-kme_234_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison des méthodes de balance des blancs</p>
+        </div>
+    <h3>Conversion XYZ</h3>
+
+        <div class="figure-container">
+            <img src="a0018-kme_234_xyz_comparison.png" alt="Images converties en XYZ puis reconverties en sRGB" class="clickable-image" data-fullsize="a0018-kme_234_xyz_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Images converties en XYZ puis reconverties en sRGB</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> a0026-kme_391</h2>
+            <h3>Image originale</h3>
+
+        <div class="figure-container">
+            <img src="a0026-kme_391_original.jpg" alt="Image dématricée sans balance des blancs" class="clickable-image" data-fullsize="a0026-kme_391_original.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Image dématricée sans balance des blancs</p>
+        </div>
+    <h3>Multiplicateurs de correction</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Méthode</th><th>Mult. R</th><th>Mult. G</th><th>Mult. B</th></tr></thead>
+            <tbody><tr><td>A) Auto Neutre À impl.</td><td>0.5000</td><td>0.5000</td><td>0.5000</td></tr>
+<tr><td>B) Grey World À impl.</td><td>0.7410</td><td>1.0000</td><td>5.6562</td></tr>
+<tr><td>C) Caméra ✓</td><td>1.4585</td><td>1.0000</td><td>2.1288</td></tr>
+</tbody>
+        </table>
+    <h3>C) Balance caméra</h3>
+
+        <div class="figure-container">
+            <img src="a0026-kme_391_camera.jpg" alt="Résultat avec balance des blancs de la caméra" class="clickable-image" data-fullsize="a0026-kme_391_camera.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Résultat avec balance des blancs de la caméra</p>
+        </div>
+    <h3>Comparaison</h3>
+
+        <div class="figure-container">
+            <img src="a0026-kme_391_comparison.png" alt="Comparaison des méthodes de balance des blancs" class="clickable-image" data-fullsize="a0026-kme_391_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison des méthodes de balance des blancs</p>
+        </div>
+    <h3>Conversion XYZ</h3>
+
+        <div class="figure-container">
+            <img src="a0026-kme_391_xyz_comparison.png" alt="Images converties en XYZ puis reconverties en sRGB" class="clickable-image" data-fullsize="a0026-kme_391_xyz_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Images converties en XYZ puis reconverties en sRGB</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> a0387-IMG_3388</h2>
+            <h3>Image originale</h3>
+
+        <div class="figure-container">
+            <img src="a0387-IMG_3388_original.jpg" alt="Image dématricée sans balance des blancs" class="clickable-image" data-fullsize="a0387-IMG_3388_original.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Image dématricée sans balance des blancs</p>
+        </div>
+    <h3>Multiplicateurs de correction</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Méthode</th><th>Mult. R</th><th>Mult. G</th><th>Mult. B</th></tr></thead>
+            <tbody><tr><td>A) Auto Neutre À impl.</td><td>0.6078</td><td>0.5384</td><td>0.5683</td></tr>
+<tr><td>B) Grey World À impl.</td><td>1.0979</td><td>1.0000</td><td>5.1511</td></tr>
+<tr><td>C) Caméra ✓</td><td>1.9943</td><td>1.0000</td><td>1.6036</td></tr>
+</tbody>
+        </table>
+    <h3>C) Balance caméra</h3>
+
+        <div class="figure-container">
+            <img src="a0387-IMG_3388_camera.jpg" alt="Résultat avec balance des blancs de la caméra" class="clickable-image" data-fullsize="a0387-IMG_3388_camera.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Résultat avec balance des blancs de la caméra</p>
+        </div>
+    <h3>Comparaison</h3>
+
+        <div class="figure-container">
+            <img src="a0387-IMG_3388_comparison.png" alt="Comparaison des méthodes de balance des blancs" class="clickable-image" data-fullsize="a0387-IMG_3388_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison des méthodes de balance des blancs</p>
+        </div>
+    <h3>Conversion XYZ</h3>
+
+        <div class="figure-container">
+            <img src="a0387-IMG_3388_xyz_comparison.png" alt="Images converties en XYZ puis reconverties en sRGB" class="clickable-image" data-fullsize="a0387-IMG_3388_xyz_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Images converties en XYZ puis reconverties en sRGB</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> a0389-KE_-0026</h2>
+            <h3>Image originale</h3>
+
+        <div class="figure-container">
+            <img src="a0389-KE_-0026_original.jpg" alt="Image dématricée sans balance des blancs" class="clickable-image" data-fullsize="a0389-KE_-0026_original.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Image dématricée sans balance des blancs</p>
+        </div>
+    <h3>Multiplicateurs de correction</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Méthode</th><th>Mult. R</th><th>Mult. G</th><th>Mult. B</th></tr></thead>
+            <tbody><tr><td>A) Auto Neutre À impl.</td><td>1.4188</td><td>0.6195</td><td>1.0916</td></tr>
+<tr><td>B) Grey World À impl.</td><td>2.1000</td><td>1.0000</td><td>1.4459</td></tr>
+<tr><td>C) Caméra ✓</td><td>2.2695</td><td>1.0000</td><td>1.7031</td></tr>
+</tbody>
+        </table>
+    <h3>C) Balance caméra</h3>
+
+        <div class="figure-container">
+            <img src="a0389-KE_-0026_camera.jpg" alt="Résultat avec balance des blancs de la caméra" class="clickable-image" data-fullsize="a0389-KE_-0026_camera.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Résultat avec balance des blancs de la caméra</p>
+        </div>
+    <h3>Comparaison</h3>
+
+        <div class="figure-container">
+            <img src="a0389-KE_-0026_comparison.png" alt="Comparaison des méthodes de balance des blancs" class="clickable-image" data-fullsize="a0389-KE_-0026_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison des méthodes de balance des blancs</p>
+        </div>
+    <h3>Conversion XYZ</h3>
+
+        <div class="figure-container">
+            <img src="a0389-KE_-0026_xyz_comparison.png" alt="Images converties en XYZ puis reconverties en sRGB" class="clickable-image" data-fullsize="a0389-KE_-0026_xyz_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Images converties en XYZ puis reconverties en sRGB</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> a0491-2004-07-29 14-32-56 CRW_3077</h2>
+            <h3>Image originale</h3>
+
+        <div class="figure-container">
+            <img src="a0491-2004-07-29 14-32-56 CRW_3077_original.jpg" alt="Image dématricée sans balance des blancs" class="clickable-image" data-fullsize="a0491-2004-07-29 14-32-56 CRW_3077_original.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Image dématricée sans balance des blancs</p>
+        </div>
+    <h3>Multiplicateurs de correction</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Méthode</th><th>Mult. R</th><th>Mult. G</th><th>Mult. B</th></tr></thead>
+            <tbody><tr><td>A) Auto Neutre À impl.</td><td>1.1920</td><td>0.6013</td><td>1.1058</td></tr>
+<tr><td>B) Grey World À impl.</td><td>2.1982</td><td>1.0000</td><td>1.1873</td></tr>
+<tr><td>C) Caméra ✓</td><td>2.1696</td><td>1.0000</td><td>1.1666</td></tr>
+</tbody>
+        </table>
+    <h3>C) Balance caméra</h3>
+
+        <div class="figure-container">
+            <img src="a0491-2004-07-29 14-32-56 CRW_3077_camera.jpg" alt="Résultat avec balance des blancs de la caméra" class="clickable-image" data-fullsize="a0491-2004-07-29 14-32-56 CRW_3077_camera.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Résultat avec balance des blancs de la caméra</p>
+        </div>
+    <h3>Comparaison</h3>
+
+        <div class="figure-container">
+            <img src="a0491-2004-07-29 14-32-56 CRW_3077_comparison.png" alt="Comparaison des méthodes de balance des blancs" class="clickable-image" data-fullsize="a0491-2004-07-29 14-32-56 CRW_3077_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison des méthodes de balance des blancs</p>
+        </div>
+    <h3>Conversion XYZ</h3>
+
+        <div class="figure-container">
+            <img src="a0491-2004-07-29 14-32-56 CRW_3077_xyz_comparison.png" alt="Images converties en XYZ puis reconverties en sRGB" class="clickable-image" data-fullsize="a0491-2004-07-29 14-32-56 CRW_3077_xyz_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Images converties en XYZ puis reconverties en sRGB</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> a0507-kme_486</h2>
+            <h3>Image originale</h3>
+
+        <div class="figure-container">
+            <img src="a0507-kme_486_original.jpg" alt="Image dématricée sans balance des blancs" class="clickable-image" data-fullsize="a0507-kme_486_original.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Image dématricée sans balance des blancs</p>
+        </div>
+    <h3>Multiplicateurs de correction</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Méthode</th><th>Mult. R</th><th>Mult. G</th><th>Mult. B</th></tr></thead>
+            <tbody><tr><td>A) Auto Neutre À impl.</td><td>1.0724</td><td>0.6998</td><td>1.3829</td></tr>
+<tr><td>B) Grey World À impl.</td><td>1.1927</td><td>1.0000</td><td>1.8729</td></tr>
+<tr><td>C) Caméra ✓</td><td>1.5105</td><td>1.0000</td><td>1.9059</td></tr>
+</tbody>
+        </table>
+    <h3>C) Balance caméra</h3>
+
+        <div class="figure-container">
+            <img src="a0507-kme_486_camera.jpg" alt="Résultat avec balance des blancs de la caméra" class="clickable-image" data-fullsize="a0507-kme_486_camera.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Résultat avec balance des blancs de la caméra</p>
+        </div>
+    <h3>Comparaison</h3>
+
+        <div class="figure-container">
+            <img src="a0507-kme_486_comparison.png" alt="Comparaison des méthodes de balance des blancs" class="clickable-image" data-fullsize="a0507-kme_486_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison des méthodes de balance des blancs</p>
+        </div>
+    <h3>Conversion XYZ</h3>
+
+        <div class="figure-container">
+            <img src="a0507-kme_486_xyz_comparison.png" alt="Images converties en XYZ puis reconverties en sRGB" class="clickable-image" data-fullsize="a0507-kme_486_xyz_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Images converties en XYZ puis reconverties en sRGB</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> a0552-GM6A8442</h2>
+            <h3>Image originale</h3>
+
+        <div class="figure-container">
+            <img src="a0552-GM6A8442_original.jpg" alt="Image dématricée sans balance des blancs" class="clickable-image" data-fullsize="a0552-GM6A8442_original.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Image dématricée sans balance des blancs</p>
+        </div>
+    <h3>Multiplicateurs de correction</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Méthode</th><th>Mult. R</th><th>Mult. G</th><th>Mult. B</th></tr></thead>
+            <tbody><tr><td>A) Auto Neutre À impl.</td><td>2.0248</td><td>1.1185</td><td>1.3307</td></tr>
+<tr><td>B) Grey World À impl.</td><td>1.7725</td><td>1.0000</td><td>1.0909</td></tr>
+<tr><td>C) Caméra ✓</td><td>2.0195</td><td>1.0000</td><td>1.1172</td></tr>
+</tbody>
+        </table>
+    <h3>C) Balance caméra</h3>
+
+        <div class="figure-container">
+            <img src="a0552-GM6A8442_camera.jpg" alt="Résultat avec balance des blancs de la caméra" class="clickable-image" data-fullsize="a0552-GM6A8442_camera.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Résultat avec balance des blancs de la caméra</p>
+        </div>
+    <h3>Comparaison</h3>
+
+        <div class="figure-container">
+            <img src="a0552-GM6A8442_comparison.png" alt="Comparaison des méthodes de balance des blancs" class="clickable-image" data-fullsize="a0552-GM6A8442_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison des méthodes de balance des blancs</p>
+        </div>
+    <h3>Conversion XYZ</h3>
+
+        <div class="figure-container">
+            <img src="a0552-GM6A8442_xyz_comparison.png" alt="Images converties en XYZ puis reconverties en sRGB" class="clickable-image" data-fullsize="a0552-GM6A8442_xyz_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Images converties en XYZ puis reconverties en sRGB</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> a0563-IMG_0286</h2>
+            <h3>Image originale</h3>
+
+        <div class="figure-container">
+            <img src="a0563-IMG_0286_original.jpg" alt="Image dématricée sans balance des blancs" class="clickable-image" data-fullsize="a0563-IMG_0286_original.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Image dématricée sans balance des blancs</p>
+        </div>
+    <h3>Multiplicateurs de correction</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Méthode</th><th>Mult. R</th><th>Mult. G</th><th>Mult. B</th></tr></thead>
+            <tbody><tr><td>A) Auto Neutre À impl.</td><td>0.5000</td><td>0.5000</td><td>0.5000</td></tr>
+<tr><td>B) Grey World À impl.</td><td>1.2987</td><td>1.0000</td><td>2.5224</td></tr>
+<tr><td>C) Caméra ✓</td><td>2.2705</td><td>1.0000</td><td>1.4951</td></tr>
+</tbody>
+        </table>
+    <h3>C) Balance caméra</h3>
+
+        <div class="figure-container">
+            <img src="a0563-IMG_0286_camera.jpg" alt="Résultat avec balance des blancs de la caméra" class="clickable-image" data-fullsize="a0563-IMG_0286_camera.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Résultat avec balance des blancs de la caméra</p>
+        </div>
+    <h3>Comparaison</h3>
+
+        <div class="figure-container">
+            <img src="a0563-IMG_0286_comparison.png" alt="Comparaison des méthodes de balance des blancs" class="clickable-image" data-fullsize="a0563-IMG_0286_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison des méthodes de balance des blancs</p>
+        </div>
+    <h3>Conversion XYZ</h3>
+
+        <div class="figure-container">
+            <img src="a0563-IMG_0286_xyz_comparison.png" alt="Images converties en XYZ puis reconverties en sRGB" class="clickable-image" data-fullsize="a0563-IMG_0286_xyz_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Images converties en XYZ puis reconverties en sRGB</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> a0693-NKIM_046</h2>
+            <h3>Image originale</h3>
+
+        <div class="figure-container">
+            <img src="a0693-NKIM_046_original.jpg" alt="Image dématricée sans balance des blancs" class="clickable-image" data-fullsize="a0693-NKIM_046_original.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Image dématricée sans balance des blancs</p>
+        </div>
+    <h3>Multiplicateurs de correction</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Méthode</th><th>Mult. R</th><th>Mult. G</th><th>Mult. B</th></tr></thead>
+            <tbody><tr><td>A) Auto Neutre À impl.</td><td>2.1558</td><td>0.8817</td><td>1.1034</td></tr>
+<tr><td>B) Grey World À impl.</td><td>2.5632</td><td>1.0000</td><td>1.2033</td></tr>
+<tr><td>C) Caméra ✓</td><td>2.3818</td><td>1.0000</td><td>1.3281</td></tr>
+</tbody>
+        </table>
+    <h3>C) Balance caméra</h3>
+
+        <div class="figure-container">
+            <img src="a0693-NKIM_046_camera.jpg" alt="Résultat avec balance des blancs de la caméra" class="clickable-image" data-fullsize="a0693-NKIM_046_camera.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Résultat avec balance des blancs de la caméra</p>
+        </div>
+    <h3>Comparaison</h3>
+
+        <div class="figure-container">
+            <img src="a0693-NKIM_046_comparison.png" alt="Comparaison des méthodes de balance des blancs" class="clickable-image" data-fullsize="a0693-NKIM_046_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison des méthodes de balance des blancs</p>
+        </div>
+    <h3>Conversion XYZ</h3>
+
+        <div class="figure-container">
+            <img src="a0693-NKIM_046_xyz_comparison.png" alt="Images converties en XYZ puis reconverties en sRGB" class="clickable-image" data-fullsize="a0693-NKIM_046_xyz_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Images converties en XYZ puis reconverties en sRGB</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> pelican</h2>
+            <h3>Image originale</h3>
+
+        <div class="figure-container">
+            <img src="pelican_original.jpg" alt="Image dématricée sans balance des blancs" class="clickable-image" data-fullsize="pelican_original.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Image dématricée sans balance des blancs</p>
+        </div>
+    <h3>Multiplicateurs de correction</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Méthode</th><th>Mult. R</th><th>Mult. G</th><th>Mult. B</th></tr></thead>
+            <tbody><tr><td>A) Auto Neutre À impl.</td><td>0.6715</td><td>0.5791</td><td>0.6037</td></tr>
+<tr><td>B) Grey World À impl.</td><td>0.8862</td><td>1.0000</td><td>1.2265</td></tr>
+<tr><td>C) Caméra ✓</td><td>1.0000</td><td>1.0000</td><td>1.0000</td></tr>
+</tbody>
+        </table>
+    <h3>C) Balance caméra</h3>
+
+        <div class="figure-container">
+            <img src="pelican_camera.jpg" alt="Résultat avec balance des blancs de la caméra" class="clickable-image" data-fullsize="pelican_camera.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Résultat avec balance des blancs de la caméra</p>
+        </div>
+    <h3>Comparaison</h3>
+
+        <div class="figure-container">
+            <img src="pelican_comparison.png" alt="Comparaison des méthodes de balance des blancs" class="clickable-image" data-fullsize="pelican_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison des méthodes de balance des blancs</p>
+        </div>
+    <h3>Conversion XYZ</h3>
+
+        <div class="figure-container">
+            <img src="pelican_xyz_comparison.png" alt="Images converties en XYZ puis reconverties en sRGB" class="clickable-image" data-fullsize="pelican_xyz_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Images converties en XYZ puis reconverties en sRGB</p>
+        </div>
+    
+        </div>
+    
+        
+        <footer>
+            <p>GIF 4105/7105 &mdash; TP1 | Formation d'une image</p>
+        </footer>
+    </div>
+    
+    <script>
+        function openLightbox(img) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const fullSizeSrc = img.getAttribute('data-fullsize') || img.src;
+            lightboxImg.src = fullSizeSrc;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeLightbox(event) {
+            const lightbox = document.getElementById('lightbox');
+            // Only close if clicking on the background or close button
+            if (event.target === lightbox || event.target.classList.contains('lightbox-close')) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+        
+        // Close lightbox on Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const lightbox = document.getElementById('lightbox');
+                lightbox.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    </script>
+</body>
+</html>

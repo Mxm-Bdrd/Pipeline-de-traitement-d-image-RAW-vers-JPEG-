@@ -265,7 +265,7 @@ def generate_report(results, output_dir):
         dans la scène. Elle est souvent plus précise que le Grey World, mais marche uniquement si une zone blanc/gris existe. 
     </p>
     <p>
-        Selon mes résultats, l'algorithme de balance caméra obtient les meilleurs images. C'est l'algorithme qui utilise
+        Selon mes résultats, avec l'algorithme Malvar, l'algorithme de balance caméra obtient les meilleurs images. C'est l'algorithme qui utilise
         les raw datas directement, donc donne un meilleur point de vue du moment qui à été capturé. La photo Ahsoka à cependant des régions
         trop lumineuses où les lumières. Je crois que la balance caméra à de la misère avec les éclairage qui varie dans l'image.
     </p>"""

@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapport TP1 - Maxime Bédard</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap');
+        
+        * { box-sizing: border-box; }
+        
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e8e8e8;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            margin-bottom: 40px;
+        }
+        
+        .student-name-field {
+            background: rgba(255,255,255,0.05);
+            border: 2px dashed rgba(255,255,255,0.3);
+            border-radius: 8px;
+            padding: 15px 25px;
+            margin: 20px auto;
+            max-width: 500px;
+            text-align: left;
+        }
+        
+        .student-name-field label {
+            display: block;
+            color: #a0a0a0;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+        
+        .student-name-field input {
+            width: 100%;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 4px;
+            padding: 10px 15px;
+            color: #fff;
+            font-size: 1em;
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+        
+        .student-name-field input:focus {
+            outline: none;
+            border-color: #778da9;
+            box-shadow: 0 0 0 2px #778da940;
+        }
+        
+        .student-name-field input::placeholder {
+            color: #666;
+            font-style: italic;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #fff;
+            margin: 0 0 15px 0;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: #a0a0a0;
+            margin: 0;
+        }
+        
+        .date-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 20px;
+            border-radius: 20px;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #b0b0b0;
+        }
+        
+        .image-section {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        
+        .image-section h2 {
+            color: #778da9;
+            font-size: 1.6em;
+            margin: 0 0 25px 0;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #778da940;
+        }
+        
+        h3 {
+            color: #e0e1dd;
+            font-size: 1.3em;
+            margin: 30px 0 20px 0;
+        }
+        
+        h3::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 24px;
+            background: #778da9;
+            margin-right: 12px;
+            border-radius: 2px;
+            vertical-align: middle;
+        }
+        
+        .algorithm-box {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #778da9;
+        }
+        
+        .algorithm-box h4 {
+            color: #778da9;
+            margin: 0 0 10px 0;
+        }
+        
+        .algorithm-box p {
+            margin: 5px 0;
+            line-height: 1.6;
+        }
+        
+        .metrics-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .metrics-table th {
+            background: #778da930;
+            color: #778da9;
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+        }
+        
+        .metrics-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95em;
+        }
+        
+        .metrics-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .metrics-table tr:hover {
+            background: rgba(255,255,255,0.03);
+        }
+        
+        .figure-container {
+            text-align: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+        }
+        
+        .figure-container img {
+            max-width: 60%;
+            max-height: 400px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .figure-container img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 30px rgba(0,0,0,0.5);
+        }
+        
+        .figure-caption {
+            margin-top: 10px;
+            font-style: italic;
+            color: #a0a0a0;
+            font-size: 0.9em;
+        }
+        
+        /* Lightbox/Modal styles */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            animation: fadeIn 0.3s;
+        }
+        
+        .lightbox.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .lightbox-content {
+            max-width: 95vw;
+            max-height: 95vh;
+            margin: auto;
+            animation: zoomIn 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 95vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.8);
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .lightbox-close:hover {
+            color: #ffc107;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        /* Image grid styles */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .image-grid-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .image-grid-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+        }
+        
+        .image-grid-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .image-grid-item .image-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: #fff;
+            padding: 15px 10px 10px;
+            font-size: 0.9em;
+            text-align: center;
+        }
+        
+        /* Comparison grid styles */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .comparison-pair {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .comparison-pair-title {
+            text-align: center;
+            color: #fff;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+        }
+        
+        .comparison-images {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .comparison-image-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .comparison-image-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+        }
+        
+        .comparison-image-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .comparison-image-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            color: #fff;
+            padding: 12px 8px 8px;
+            font-size: 0.85em;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .metadata-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .metadata-card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #778da9;
+        }
+        
+        .metadata-card h4 {
+            color: #778da9;
+            margin: 0 0 12px 0;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .metadata-card .value {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1em;
+            color: #fff;
+            word-break: break-all;
+        }
+        
+        .formula-box {
+            background: rgba(0,0,0,0.4);
+            padding: 20px 25px;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1em;
+            text-align: center;
+            margin: 20px 0;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #ffd54f;
+        }
+        
+        .matrix-display {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85em;
+            overflow-x: auto;
+            white-space: pre;
+            color: #b0bec5;
+        }
+        
+        .bayer-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 40px);
+            gap: 4px;
+            margin-top: 10px;
+        }
+        
+        .bayer-cell {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .bayer-cell.R { background: linear-gradient(135deg, #f44336, #c62828); }
+        .bayer-cell.G { background: linear-gradient(135deg, #4caf50, #2e7d32); }
+        .bayer-cell.B { background: linear-gradient(135deg, #2196f3, #1565c0); }
+        
+        .wb-values {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        
+        .wb-chip {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-family: 'Fira Code', monospace;
+            font-weight: 500;
+        }
+        
+        .wb-chip.r { background: rgba(244, 67, 54, 0.3); color: #ef9a9a; }
+        .wb-chip.g { background: rgba(76, 175, 80, 0.3); color: #a5d6a7; }
+        .wb-chip.b { background: rgba(33, 150, 243, 0.3); color: #90caf9; }
+        
+        code {
+            background: #778da920;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9em;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+        <span class="lightbox-close">&times;</span>
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="">
+        </div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1>📸 Rapport TP1 - Maxime Bédard</h1>
+            <p class="subtitle"></p>
+            <div class="date-badge">Généré le 04 February 2026 à 22:52</div>
+        </header>
+        
+        
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Section 1: Chargement et Compréhension des Données RAW</h2>
+            <h3>Introduction</h3>
+<div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #4fc3f7;"><p style="color: #a0a0a0; font-style: italic;">Le format RAW contient les données brutes du capteur sans traitement. 
+        Ces données sont enregistrées en motif de Bayer, où chaque pixel ne capture qu'une seule couleur (R, G ou B). 
+        J'ai observé que les images brutes apparaissent très sombres car elles sont linéaires, le capteur compte les photons proportionnellement, et n'ont pas encore subi de correction. 
+        La normalisation est essentielle pour ramener les valeurs (dans mon cas sur 12, 14 et 16 bits) vers un intervalle [0, 1]. 
+        On soustrait aussi un petit niveau de noir du capteur pour contrer le bruit.</p></div>
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Image: Ahsoka</h2>
+            <h3>Région 16×16 de la mosaïque - Ahsoka</h3>
+
+        <div class="figure-container">
+            <img src="../images_intermediaires_sec1/Ahsoka_zoom16x16.png" alt="Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré." class="clickable-image" data-fullsize="../images_intermediaires_sec1/Ahsoka_zoom16x16.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré.</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Image: Antoine</h2>
+            <h3>Région 16×16 de la mosaïque - Antoine</h3>
+
+        <div class="figure-container">
+            <img src="../images_intermediaires_sec1/Antoine_zoom16x16.png" alt="Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré." class="clickable-image" data-fullsize="../images_intermediaires_sec1/Antoine_zoom16x16.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré.</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Image: BoisDeCoulonge</h2>
+            <h3>Région 16×16 de la mosaïque - BoisDeCoulonge</h3>
+
+        <div class="figure-container">
+            <img src="../images_intermediaires_sec1/BoisDeCoulonge_zoom16x16.png" alt="Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré." class="clickable-image" data-fullsize="../images_intermediaires_sec1/BoisDeCoulonge_zoom16x16.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Zoom sur une région 16×16 montrant les valeurs normalisées et le motif de Bayer coloré.</p>
+        </div>
+    
+        </div>
+    <h3>Analyse et observations</h3>
+<div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #4fc3f7;"><p style="color: #a0a0a0; font-style: italic;">
+                J'ai remarqué que mes images personnelles ont 14 bits de profondeur.
+                Celles fourni varie entre 12, 14 et même 16 bits pour le pelican. 
+                On comprend vite l'importance de la normalisation pour ramener
+                toutes ces valeurs dans un seul intervalle pour le traitement.
+            
+                Aussi, en zoomant sur le 16x16, on peut voir le filtre de Bayer de l'image.
+                Les filtre change d'image en image.
+                L'image n'est pas encore dématricée donc le filtre est très apparent quand on zoom.
+        
+                Finalement, le niveau de noir n'est jamais à 0 dans les métadonnées.
+                J'assume que c'est le capteur qui capture de la lumière parasite.
+                Le code soustrait on offset avant la normalisation pour ça.
+        </p></div>
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">🎨</span> Section 2: Dématriçage (Demosaicking)</h2>
+            <h3>Introduction</h3>
+<div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #778da9;"><p style="color: #a0a0a0; font-style: italic;">Le dématriçage consiste à interpoler les couleurs manquantes pour obtenir une image RGB complète. La méthode bilinéaire est rapide mais elle donne des artefacts de couleur sur les contours (visible quand on zoom). La méthode Malvar améliore le résultat en utilisant la luminance pour corriger l'interpolation des canaux rouge et bleu. Visuellement, on voit donc des contours plus nets et moins d'artefacts de fausses couleurs.</p></div>
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Image: Ahsoka</h2>
+            <h3>Comparaison des méthodes - Ahsoka</h3>
+
+        <div class="figure-container">
+            <img src="../images_intermediaires_sec2/Ahsoka_comparison.png" alt="Comparaison des méthodes de dématriçage" class="clickable-image" data-fullsize="../images_intermediaires_sec2/Ahsoka_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison des méthodes de dématriçage</p>
+        </div>
+    <h3>Zoom sur les artefacts - Ahsoka</h3>
+
+        <div class="figure-container">
+            <img src="../images_intermediaires_sec2/Ahsoka_zoom.png" alt="Recadrages montrant les artefacts de contour" class="clickable-image" data-fullsize="../images_intermediaires_sec2/Ahsoka_zoom.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Recadrages montrant les artefacts de contour</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Image: Antoine</h2>
+            <h3>Comparaison des méthodes - Antoine</h3>
+
+        <div class="figure-container">
+            <img src="../images_intermediaires_sec2/Antoine_comparison.png" alt="Comparaison des méthodes de dématriçage" class="clickable-image" data-fullsize="../images_intermediaires_sec2/Antoine_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison des méthodes de dématriçage</p>
+        </div>
+    <h3>Zoom sur les artefacts - Antoine</h3>
+
+        <div class="figure-container">
+            <img src="../images_intermediaires_sec2/Antoine_zoom.png" alt="Recadrages montrant les artefacts de contour" class="clickable-image" data-fullsize="../images_intermediaires_sec2/Antoine_zoom.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Recadrages montrant les artefacts de contour</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Image: BoisDeCoulonge</h2>
+            <h3>Comparaison des méthodes - BoisDeCoulonge</h3>
+
+        <div class="figure-container">
+            <img src="../images_intermediaires_sec2/BoisDeCoulonge_comparison.png" alt="Comparaison des méthodes de dématriçage" class="clickable-image" data-fullsize="../images_intermediaires_sec2/BoisDeCoulonge_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison des méthodes de dématriçage</p>
+        </div>
+    <h3>Zoom sur les artefacts - BoisDeCoulonge</h3>
+
+        <div class="figure-container">
+            <img src="../images_intermediaires_sec2/BoisDeCoulonge_zoom.png" alt="Recadrages montrant les artefacts de contour" class="clickable-image" data-fullsize="../images_intermediaires_sec2/BoisDeCoulonge_zoom.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Recadrages montrant les artefacts de contour</p>
+        </div>
+    
+        </div>
+    <h3>Analyse et observations</h3>
+<div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #778da9;"><p style="color: #a0a0a0; font-style: italic;">
+            Théoriquement, l'interpolation bilinéaire devrait présenter des artefacts visibles 
+            sur les contours nets. Cela est dû au fait qu'elle traite chaque canal indépendamment 
+            sans tenir compte de ce que les couleurs autours ont comme luminosité.
+            La méthode Malvar-Cutler devrait corriger cela en utilisant le gradient du canal vert 
+            pour faire l'interpolation du rouge et du bleu. Les deux algorithmes sont linéaire et donc peu couteux,
+            mais Malvar prend un temps un peu plus long. Cela est probablement dû au fait que la convolution se fait sur
+            des matrices plus larges. Cependant, quand je révise mes résultats
+            obtenus avec les algorithmes, la différence des artefacts semble négligeable, même en zoomant aux extrémités.
+            Tout de même, les photos ont l'allure attendue par le rematriçage.
+        </p></div>
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">⚪</span> Section 3: Balance des Blancs (White Balance)</h2>
+            <h3>Introduction</h3>
+<div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #e94560;"><p style="color: #a0a0a0; font-style: italic;">La balance des blancs sert à corriger la teinte globale de l'image pour que les objets neutres soit gris. L'algorithme Grey World dit que la moyenne de l'image est grise, ce qui est mauvais pour les images avec une couleur dominante (comme ma photo de forêt verte). La méthode de la région neutre automatique est meilleure si une zone blanche est présente. </p></div>
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Image: Ahsoka</h2>
+            <h3>Comparaison des méthodes - Ahsoka</h3>
+
+        <div class="figure-container">
+            <img src="../images_intermediaires_sec3/Ahsoka_comparison.png" alt="Comparaison des méthodes de balance des blancs" class="clickable-image" data-fullsize="../images_intermediaires_sec3/Ahsoka_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison des méthodes de balance des blancs</p>
+        </div>
+    <h3>Conversion XYZ - Ahsoka</h3>
+
+        <div class="figure-container">
+            <img src="../images_intermediaires_sec3/Ahsoka_xyz_comparison.png" alt="Images converties en XYZ puis reconverties en sRGB" class="clickable-image" data-fullsize="../images_intermediaires_sec3/Ahsoka_xyz_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Images converties en XYZ puis reconverties en sRGB</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Image: Antoine</h2>
+            <h3>Comparaison des méthodes - Antoine</h3>
+
+        <div class="figure-container">
+            <img src="../images_intermediaires_sec3/Antoine_comparison.png" alt="Comparaison des méthodes de balance des blancs" class="clickable-image" data-fullsize="../images_intermediaires_sec3/Antoine_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison des méthodes de balance des blancs</p>
+        </div>
+    <h3>Conversion XYZ - Antoine</h3>
+
+        <div class="figure-container">
+            <img src="../images_intermediaires_sec3/Antoine_xyz_comparison.png" alt="Images converties en XYZ puis reconverties en sRGB" class="clickable-image" data-fullsize="../images_intermediaires_sec3/Antoine_xyz_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Images converties en XYZ puis reconverties en sRGB</p>
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Image: BoisDeCoulonge</h2>
+            <h3>Comparaison des méthodes - BoisDeCoulonge</h3>
+
+        <div class="figure-container">
+            <img src="../images_intermediaires_sec3/BoisDeCoulonge_comparison.png" alt="Comparaison des méthodes de balance des blancs" class="clickable-image" data-fullsize="../images_intermediaires_sec3/BoisDeCoulonge_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison des méthodes de balance des blancs</p>
+        </div>
+    <h3>Conversion XYZ - BoisDeCoulonge</h3>
+
+        <div class="figure-container">
+            <img src="../images_intermediaires_sec3/BoisDeCoulonge_xyz_comparison.png" alt="Images converties en XYZ puis reconverties en sRGB" class="clickable-image" data-fullsize="../images_intermediaires_sec3/BoisDeCoulonge_xyz_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Images converties en XYZ puis reconverties en sRGB</p>
+        </div>
+    
+        </div>
+    <h3>Analyse et observations</h3>
+<div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #e94560;"><p style="color: #a0a0a0; font-style: italic;">
+        Les multiplicateurs me dise la couleur dominante de la source lumineuse. 
+        Par exemple, pour ma photo Ahsoka, cela signifie que le capteur a reçu beaucoup de rouge et qu'il faut le diminuer pour équilibrer l'image. 
+        Ensuite, selon mes résultats, avec l'algorithme Malvar, l'algorithme de balance caméra obtient les meilleurs images. C'est l'algorithme qui utilise
+        les raw datas directement, donc donne un meilleur point de vue du moment qui à été capturé. La photo Ahsoka à cependant des régions
+        trop lumineuses où les lumières. Je crois que la balance caméra à de la misère avec les éclairage qui varie dans l'image.
+        La conversion vers l'espace XYZ standardise les couleurs
+        peut importe pour quel appareil, ce qui est nécessaire avant de convertir vers le sRGB.
+    </p></div>
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">🎨</span> Section 4: Mappage Tonal et Encodage d'Affichage</h2>
+            <h3>Introduction</h3>
+<div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #778da9;"><p style="color: #a0a0a0; font-style: italic;">Le mappage tonal adapte la grande plage dynamique du capteur (comme HDR)à l'affichage limité. L'opérateur linéaire coupe les hautes lumières mais en perdant les détails dans les zones claires. L'opérateur de Reinhard compresse ces hautes lumières avec une courbe non-linéaire, préservant les détails. L'OETF sRGB applique  une correction gamma pour que la luminosité perçue soit correcte. Finalament, la compression JPEG fait apparaître des artefacts de blocs visibles à cause de la perte d'information des hautes fréquences dans la compression.</p></div><h3>Concepts et algorithmes</h3>
+
+        <div class="algorithm-box">
+            <h4>A) Ajustement de luminosité</h4>
+            <p>Division par le 99e percentile.</p>
+        </div>
+    
+        <div class="algorithm-box">
+            <h4>B) Mappage tonal</h4>
+            <p><b>Linéaire:</b> Pas de compression.</p><p><b>Reinhard:</b> <code>L_out = L_in / (1 + L_in)</code>.</p>
+        </div>
+    
+        <div class="algorithm-box">
+            <h4>C) Conversion XYZ → sRGB</h4>
+            <p>Matrice standard D65 suivie de l'OETF sRGB.</p>
+        </div>
+    
+        <div class="algorithm-box">
+            <h4>D) OETF sRGB</h4>
+            <div class="formula-box">sRGB = 1.055 × linéaire^(1/2.4) − 0.055</div>
+        </div>
+    
+        <div class="algorithm-box">
+            <h4>E) Analyse des artefacts JPEG</h4>
+            <p>Sauvegarde en différentes qualités et analyse des artefacts.</p>
+        </div>
+    <h3>Courbes de mappage tonal</h3>
+
+        <div class="figure-container">
+            <img src="tonemapping_curves.png" alt="Comparaison des courbes de réponse" class="clickable-image" data-fullsize="tonemapping_curves.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison des courbes de réponse</p>
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Ahsoka</h2>
+            <h3>Comparaison des opérateurs</h3>
+
+        <div class="figure-container">
+            <img src="Ahsoka_tonemapping_comparison.png" alt="Comparaison: Linéaire, Reinhard" class="clickable-image" data-fullsize="Ahsoka_tonemapping_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison: Linéaire, Reinhard</p>
+        </div>
+    <h3>Avant/Après OETF</h3>
+
+        <div class="figure-container">
+            <img src="Ahsoka_oetf_comparison.png" alt="L'OETF encode les valeurs linéaires pour l'affichage" class="clickable-image" data-fullsize="Ahsoka_oetf_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">L'OETF encode les valeurs linéaires pour l'affichage</p>
+        </div>
+    <h3>Image finale</h3>
+
+        <div class="figure-container">
+            <img src="Ahsoka_final.jpg" alt="Image JPEG finale (qualité 95)" class="clickable-image" data-fullsize="Ahsoka_final.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Image JPEG finale (qualité 95)</p>
+        </div>
+    <h3>Plage dynamique</h3>
+
+        <div class="figure-container">
+            <img src="Ahsoka_dynamic_range.png" alt="Analyse des hautes lumières et ombres" class="clickable-image" data-fullsize="Ahsoka_dynamic_range.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Analyse des hautes lumières et ombres</p>
+        </div>
+    
+        <table class="metrics-table">
+            <thead><tr><th>Métrique</th><th>Valeur</th></tr></thead>
+            <tbody><tr><td>Plage dynamique</td><td>6.9 stops</td></tr>
+<tr><td>Hautes lumières écrêtées</td><td>0.60%</td></tr>
+<tr><td>Ombres écrasées</td><td>1.78%</td></tr>
+</tbody>
+        </table>
+    <h3>Analyse de compression JPEG</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Qualité</th><th>Taille</th><th>Ratio</th><th>PSNR</th></tr></thead>
+            <tbody><tr><td>JPEG Q=95</td><td>7632.5 KB</td><td>4.5:1</td><td>30.77 dB</td></tr>
+<tr><td>JPEG Q=75</td><td>2133.3 KB</td><td>16.1:1</td><td>28.25 dB</td></tr>
+<tr><td>JPEG Q=50</td><td>1158.1 KB</td><td>29.7:1</td><td>27.81 dB</td></tr>
+<tr><td>JPEG Q=25</td><td>542.2 KB</td><td>63.4:1</td><td>27.35 dB</td></tr>
+</tbody>
+        </table>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> Antoine</h2>
+            <h3>Comparaison des opérateurs</h3>
+
+        <div class="figure-container">
+            <img src="Antoine_tonemapping_comparison.png" alt="Comparaison: Linéaire, Reinhard" class="clickable-image" data-fullsize="Antoine_tonemapping_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison: Linéaire, Reinhard</p>
+        </div>
+    <h3>Avant/Après OETF</h3>
+
+        <div class="figure-container">
+            <img src="Antoine_oetf_comparison.png" alt="L'OETF encode les valeurs linéaires pour l'affichage" class="clickable-image" data-fullsize="Antoine_oetf_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">L'OETF encode les valeurs linéaires pour l'affichage</p>
+        </div>
+    <h3>Image finale</h3>
+
+        <div class="figure-container">
+            <img src="Antoine_final.jpg" alt="Image JPEG finale (qualité 95)" class="clickable-image" data-fullsize="Antoine_final.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Image JPEG finale (qualité 95)</p>
+        </div>
+    <h3>Plage dynamique</h3>
+
+        <div class="figure-container">
+            <img src="Antoine_dynamic_range.png" alt="Analyse des hautes lumières et ombres" class="clickable-image" data-fullsize="Antoine_dynamic_range.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Analyse des hautes lumières et ombres</p>
+        </div>
+    
+        <table class="metrics-table">
+            <thead><tr><th>Métrique</th><th>Valeur</th></tr></thead>
+            <tbody><tr><td>Plage dynamique</td><td>8.0 stops</td></tr>
+<tr><td>Hautes lumières écrêtées</td><td>0.04%</td></tr>
+<tr><td>Ombres écrasées</td><td>8.55%</td></tr>
+</tbody>
+        </table>
+    <h3>Analyse de compression JPEG</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Qualité</th><th>Taille</th><th>Ratio</th><th>PSNR</th></tr></thead>
+            <tbody><tr><td>JPEG Q=95</td><td>9597.0 KB</td><td>3.8:1</td><td>28.39 dB</td></tr>
+<tr><td>JPEG Q=75</td><td>2819.1 KB</td><td>13.0:1</td><td>25.90 dB</td></tr>
+<tr><td>JPEG Q=50</td><td>1639.3 KB</td><td>22.4:1</td><td>25.45 dB</td></tr>
+<tr><td>JPEG Q=25</td><td>791.3 KB</td><td>46.5:1</td><td>25.05 dB</td></tr>
+</tbody>
+        </table>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📷</span> BoisDeCoulonge</h2>
+            <h3>Comparaison des opérateurs</h3>
+
+        <div class="figure-container">
+            <img src="BoisDeCoulonge_tonemapping_comparison.png" alt="Comparaison: Linéaire, Reinhard" class="clickable-image" data-fullsize="BoisDeCoulonge_tonemapping_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Comparaison: Linéaire, Reinhard</p>
+        </div>
+    <h3>Avant/Après OETF</h3>
+
+        <div class="figure-container">
+            <img src="BoisDeCoulonge_oetf_comparison.png" alt="L'OETF encode les valeurs linéaires pour l'affichage" class="clickable-image" data-fullsize="BoisDeCoulonge_oetf_comparison.png" onclick="openLightbox(this)">
+            <p class="figure-caption">L'OETF encode les valeurs linéaires pour l'affichage</p>
+        </div>
+    <h3>Image finale</h3>
+
+        <div class="figure-container">
+            <img src="BoisDeCoulonge_final.jpg" alt="Image JPEG finale (qualité 95)" class="clickable-image" data-fullsize="BoisDeCoulonge_final.jpg" onclick="openLightbox(this)">
+            <p class="figure-caption">Image JPEG finale (qualité 95)</p>
+        </div>
+    <h3>Plage dynamique</h3>
+
+        <div class="figure-container">
+            <img src="BoisDeCoulonge_dynamic_range.png" alt="Analyse des hautes lumières et ombres" class="clickable-image" data-fullsize="BoisDeCoulonge_dynamic_range.png" onclick="openLightbox(this)">
+            <p class="figure-caption">Analyse des hautes lumières et ombres</p>
+        </div>
+    
+        <table class="metrics-table">
+            <thead><tr><th>Métrique</th><th>Valeur</th></tr></thead>
+            <tbody><tr><td>Plage dynamique</td><td>6.3 stops</td></tr>
+<tr><td>Hautes lumières écrêtées</td><td>0.00%</td></tr>
+<tr><td>Ombres écrasées</td><td>0.41%</td></tr>
+</tbody>
+        </table>
+    <h3>Analyse de compression JPEG</h3>
+
+        <table class="metrics-table">
+            <thead><tr><th>Qualité</th><th>Taille</th><th>Ratio</th><th>PSNR</th></tr></thead>
+            <tbody><tr><td>JPEG Q=95</td><td>5192.6 KB</td><td>5.7:1</td><td>32.62 dB</td></tr>
+<tr><td>JPEG Q=75</td><td>1708.9 KB</td><td>17.4:1</td><td>31.63 dB</td></tr>
+<tr><td>JPEG Q=50</td><td>1084.9 KB</td><td>27.4:1</td><td>30.99 dB</td></tr>
+<tr><td>JPEG Q=25</td><td>715.9 KB</td><td>41.5:1</td><td>29.97 dB</td></tr>
+</tbody>
+        </table>
+    
+        </div>
+    <h3>Analyse et observations</h3>
+<div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #778da9;"><p style="color: #a0a0a0; font-style: italic;">Comme discuté dans l'introduction, le mappage linéaire coupe les hautes lumières. On peut voir dans les photos les zones"
+        "coupés. Les données nous dise 0.60% pour Ahsoka, ce qui est très faible donc peu de perte d'information."
+        "Sans l'OETF sRGB, l'image linéaire est sombre et manque de lumière. L'OETF restaure la perception naturelle de la luminosité. L'image finale affiche une plage dynamique de 6.9 stops. 
+        Les ombres sont plus écrasées (1.78%) que les hautes lumières. 
+        Cela est probablement à cause du storage 8 bits qui ne peut pas contenir toute la plage dynamique capturée par le capteur (16 bits).
+        Le tableau montre le compromis taille/qualité. 
+        À Q=95, la qualité est maximale (PSNR 30.8 dB) mais le fichier est lourd (7.6 MB). 
+        À Q=25, la compression est immense (63:1) et le fichier est de seulement 542 KB, mais la qualité visuelle n'est pas bonne (PSNR 27.35 dB et des artefacts de blocs sur les contours). 
+        Je crois que Q=75 offre le meilleur compromis.</p></div>
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">🖼️</span> Comparaison des Images Finales</h2>
+            <h3>Comparaison: Vos résultats vs Références sRGB</h3>
+<p style="color: #a0a0a0; margin-bottom: 20px;">Comparez vos images finales avec les aperçus sRGB générés par rawpy. Cliquez sur une image pour l'agrandir.</p>
+        
+        <div class="comparison-grid">
+            
+            <div class="comparison-pair">
+                <div class="comparison-pair-title">Ahsoka</div>
+                <div class="comparison-images">
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="Ahsoka_final.jpg" alt="Image finale - Ahsoka" data-fullsize="Ahsoka_final.jpg">
+                        <div class="comparison-image-label">Votre résultat</div>
+                    </div>
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="../images_intermediaires_sec1/Ahsoka_srgb.jpg" alt="Référence sRGB - Ahsoka" data-fullsize="../images_intermediaires_sec1/Ahsoka_srgb.jpg">
+                        <div class="comparison-image-label">Référence sRGB</div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="comparison-pair">
+                <div class="comparison-pair-title">Antoine</div>
+                <div class="comparison-images">
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="Antoine_final.jpg" alt="Image finale - Antoine" data-fullsize="Antoine_final.jpg">
+                        <div class="comparison-image-label">Votre résultat</div>
+                    </div>
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="../images_intermediaires_sec1/Antoine_srgb.jpg" alt="Référence sRGB - Antoine" data-fullsize="../images_intermediaires_sec1/Antoine_srgb.jpg">
+                        <div class="comparison-image-label">Référence sRGB</div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="comparison-pair">
+                <div class="comparison-pair-title">BoisDeCoulonge</div>
+                <div class="comparison-images">
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="BoisDeCoulonge_final.jpg" alt="Image finale - BoisDeCoulonge" data-fullsize="BoisDeCoulonge_final.jpg">
+                        <div class="comparison-image-label">Votre résultat</div>
+                    </div>
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="../images_intermediaires_sec1/BoisDeCoulonge_srgb.jpg" alt="Référence sRGB - BoisDeCoulonge" data-fullsize="../images_intermediaires_sec1/BoisDeCoulonge_srgb.jpg">
+                        <div class="comparison-image-label">Référence sRGB</div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="comparison-pair">
+                <div class="comparison-pair-title">a0011-DSC_0082</div>
+                <div class="comparison-images">
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="a0011-DSC_0082_final.jpg" alt="Image finale - a0011-DSC_0082" data-fullsize="a0011-DSC_0082_final.jpg">
+                        <div class="comparison-image-label">Votre résultat</div>
+                    </div>
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="../images_intermediaires_sec1/a0011-DSC_0082_srgb.jpg" alt="Référence sRGB - a0011-DSC_0082" data-fullsize="../images_intermediaires_sec1/a0011-DSC_0082_srgb.jpg">
+                        <div class="comparison-image-label">Référence sRGB</div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="comparison-pair">
+                <div class="comparison-pair-title">a0018-kme_234</div>
+                <div class="comparison-images">
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="a0018-kme_234_final.jpg" alt="Image finale - a0018-kme_234" data-fullsize="a0018-kme_234_final.jpg">
+                        <div class="comparison-image-label">Votre résultat</div>
+                    </div>
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="../images_intermediaires_sec1/a0018-kme_234_srgb.jpg" alt="Référence sRGB - a0018-kme_234" data-fullsize="../images_intermediaires_sec1/a0018-kme_234_srgb.jpg">
+                        <div class="comparison-image-label">Référence sRGB</div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="comparison-pair">
+                <div class="comparison-pair-title">a0026-kme_391</div>
+                <div class="comparison-images">
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="a0026-kme_391_final.jpg" alt="Image finale - a0026-kme_391" data-fullsize="a0026-kme_391_final.jpg">
+                        <div class="comparison-image-label">Votre résultat</div>
+                    </div>
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="../images_intermediaires_sec1/a0026-kme_391_srgb.jpg" alt="Référence sRGB - a0026-kme_391" data-fullsize="../images_intermediaires_sec1/a0026-kme_391_srgb.jpg">
+                        <div class="comparison-image-label">Référence sRGB</div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="comparison-pair">
+                <div class="comparison-pair-title">a0387-IMG_3388</div>
+                <div class="comparison-images">
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="a0387-IMG_3388_final.jpg" alt="Image finale - a0387-IMG_3388" data-fullsize="a0387-IMG_3388_final.jpg">
+                        <div class="comparison-image-label">Votre résultat</div>
+                    </div>
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="../images_intermediaires_sec1/a0387-IMG_3388_srgb.jpg" alt="Référence sRGB - a0387-IMG_3388" data-fullsize="../images_intermediaires_sec1/a0387-IMG_3388_srgb.jpg">
+                        <div class="comparison-image-label">Référence sRGB</div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="comparison-pair">
+                <div class="comparison-pair-title">a0389-KE_-0026</div>
+                <div class="comparison-images">
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="a0389-KE_-0026_final.jpg" alt="Image finale - a0389-KE_-0026" data-fullsize="a0389-KE_-0026_final.jpg">
+                        <div class="comparison-image-label">Votre résultat</div>
+                    </div>
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="../images_intermediaires_sec1/a0389-KE_-0026_srgb.jpg" alt="Référence sRGB - a0389-KE_-0026" data-fullsize="../images_intermediaires_sec1/a0389-KE_-0026_srgb.jpg">
+                        <div class="comparison-image-label">Référence sRGB</div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="comparison-pair">
+                <div class="comparison-pair-title">a0491-2004-07-29 14-32-56 CRW_3077</div>
+                <div class="comparison-images">
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="a0491-2004-07-29 14-32-56 CRW_3077_final.jpg" alt="Image finale - a0491-2004-07-29 14-32-56 CRW_3077" data-fullsize="a0491-2004-07-29 14-32-56 CRW_3077_final.jpg">
+                        <div class="comparison-image-label">Votre résultat</div>
+                    </div>
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="../images_intermediaires_sec1/a0491-2004-07-29 14-32-56 CRW_3077_srgb.jpg" alt="Référence sRGB - a0491-2004-07-29 14-32-56 CRW_3077" data-fullsize="../images_intermediaires_sec1/a0491-2004-07-29 14-32-56 CRW_3077_srgb.jpg">
+                        <div class="comparison-image-label">Référence sRGB</div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="comparison-pair">
+                <div class="comparison-pair-title">a0507-kme_486</div>
+                <div class="comparison-images">
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="a0507-kme_486_final.jpg" alt="Image finale - a0507-kme_486" data-fullsize="a0507-kme_486_final.jpg">
+                        <div class="comparison-image-label">Votre résultat</div>
+                    </div>
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="../images_intermediaires_sec1/a0507-kme_486_srgb.jpg" alt="Référence sRGB - a0507-kme_486" data-fullsize="../images_intermediaires_sec1/a0507-kme_486_srgb.jpg">
+                        <div class="comparison-image-label">Référence sRGB</div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="comparison-pair">
+                <div class="comparison-pair-title">a0552-GM6A8442</div>
+                <div class="comparison-images">
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="a0552-GM6A8442_final.jpg" alt="Image finale - a0552-GM6A8442" data-fullsize="a0552-GM6A8442_final.jpg">
+                        <div class="comparison-image-label">Votre résultat</div>
+                    </div>
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="../images_intermediaires_sec1/a0552-GM6A8442_srgb.jpg" alt="Référence sRGB - a0552-GM6A8442" data-fullsize="../images_intermediaires_sec1/a0552-GM6A8442_srgb.jpg">
+                        <div class="comparison-image-label">Référence sRGB</div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="comparison-pair">
+                <div class="comparison-pair-title">a0563-IMG_0286</div>
+                <div class="comparison-images">
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="a0563-IMG_0286_final.jpg" alt="Image finale - a0563-IMG_0286" data-fullsize="a0563-IMG_0286_final.jpg">
+                        <div class="comparison-image-label">Votre résultat</div>
+                    </div>
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="../images_intermediaires_sec1/a0563-IMG_0286_srgb.jpg" alt="Référence sRGB - a0563-IMG_0286" data-fullsize="../images_intermediaires_sec1/a0563-IMG_0286_srgb.jpg">
+                        <div class="comparison-image-label">Référence sRGB</div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="comparison-pair">
+                <div class="comparison-pair-title">a0693-NKIM_046</div>
+                <div class="comparison-images">
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="a0693-NKIM_046_final.jpg" alt="Image finale - a0693-NKIM_046" data-fullsize="a0693-NKIM_046_final.jpg">
+                        <div class="comparison-image-label">Votre résultat</div>
+                    </div>
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="../images_intermediaires_sec1/a0693-NKIM_046_srgb.jpg" alt="Référence sRGB - a0693-NKIM_046" data-fullsize="../images_intermediaires_sec1/a0693-NKIM_046_srgb.jpg">
+                        <div class="comparison-image-label">Référence sRGB</div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="comparison-pair">
+                <div class="comparison-pair-title">pelican</div>
+                <div class="comparison-images">
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="pelican_final.jpg" alt="Image finale - pelican" data-fullsize="pelican_final.jpg">
+                        <div class="comparison-image-label">Votre résultat</div>
+                    </div>
+                    <div class="comparison-image-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="../images_intermediaires_sec1/pelican_srgb.jpg" alt="Référence sRGB - pelican" data-fullsize="../images_intermediaires_sec1/pelican_srgb.jpg">
+                        <div class="comparison-image-label">Référence sRGB</div>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+    
+        </div>
+    
+        <div class="image-section">
+            <h2><span class="icon">📝</span> Conclusion</h2>
+            <h3>Conclusion</h3>
+<div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #ffd54f;"><p style="color: #a0a0a0; font-style: italic;">
+        Le pipeline a permis de refaire la formation d'une image à partir des données raw venant d'une capteur.
+        Dans mon cas, j'utilisais un Canon EOS REBEL T3i avec les réglage suivant : 
+        - ISO-2500
+        - F-stop f/2
+        - Exposure time 1/160 sec
+        - Bias 0 step
+        - Metering mode Pattern
+        En partant des données brutes du capteur, j'ai fait la normalisation, dématriçage, balance des blancs, et mappage tonal.
+        J'ai constater l'importance du mappage tonal (Reinhard) pour compresser la dynamique 14 bits vers l'affichage 8 bits sans perdre les hautes lumières.
+        La qualité est beaucoup moins bonne avec les pertes d'informations.
+        Finalement, en comparant, mes images sorties du pipeline sont très semblables aux références, 
+        quoique que les miennes semble trop clair.
+        </p></div>
+        </div>
+    
+        
+        <footer>
+            <p>GIF 4105/7105 &mdash; TP1 | Formation d'une image</p>
+        </footer>
+    </div>
+    
+    <script>
+        function openLightbox(img) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const fullSizeSrc = img.getAttribute('data-fullsize') || img.src;
+            lightboxImg.src = fullSizeSrc;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeLightbox(event) {
+            const lightbox = document.getElementById('lightbox');
+            // Only close if clicking on the background or close button
+            if (event.target === lightbox || event.target.classList.contains('lightbox-close')) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+        
+        // Close lightbox on Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const lightbox = document.getElementById('lightbox');
+                lightbox.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    </script>
+</body>
+</html>
